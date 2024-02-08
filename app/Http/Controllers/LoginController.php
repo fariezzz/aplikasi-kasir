@@ -8,12 +8,12 @@ use Illuminate\Support\Facades\Auth;
 class LoginController extends Controller
 {
     public function login(){
-        return view('auth.index');
+        return view('pages.auth.index', ['title' => 'Login']);
     }
 
     public function authenticate(){
         $credentials = request()->validate([
-            'email' => 'required|email:dns',
+            'username' => 'required',
             'password' => 'required'
         ]);
 
@@ -23,7 +23,7 @@ class LoginController extends Controller
             return redirect()->intended('/');
         }
 
-        return back()->with('loginError', 'Login failed!');
+        return back()->with('failed', 'Login failed!');
     }
 
     public function logout(){

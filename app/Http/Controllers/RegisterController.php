@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Hash;
 class RegisterController extends Controller
 {
     public function register(){
-        return view('register.index');
+        return view('pages.register.index', ['title' => 'Registration']);
     }
 
     public function store(Request $request){
@@ -17,11 +17,11 @@ class RegisterController extends Controller
             'name' => 'required|max:255',
             'username' => ['required', 'min:5', 'max:20', 'unique:users'],
             'email' => ['required', 'email:dns', 'unique:users'],
+            'role' => 'required',
             'password' => ['required', 'min:5', 'max:255']
         ]);
 
         $validatedData['password'] = Hash::make($validatedData['password']);
-        $validatedData['role'] = 'admin';
 
         User::create($validatedData);
 

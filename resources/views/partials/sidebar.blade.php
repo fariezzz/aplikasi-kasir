@@ -1,86 +1,64 @@
-<div class="wrapper">
+<div class="wrapper d-flex flex-column">
     <aside id="sidebar">
-        <div class="d-flex">
-            <div class="toggle-btn">
-                <i class="lni lni-grid-alt"></i>
+        <div class="d-flex container-fluid mt-3">
+            <div class="sidebar-logo mx-3">
+                <a href="/"><img src="{{ asset('logo/bookhaven-logo.png') }}" width="50" height="auto" alt=""></a>
             </div>
-            <div class="sidebar-logo">
-                <a href="#">BookHaven</a>
+            <div class="sidebar-logo-text mt-3">
+                <a href="/">BookHaven</a>
             </div>
         </div>
-        <ul class="sidebar-nav">
+        <ul class="sidebar-nav py-3">
             <li class="sidebar-item">
                 <a href="#" class="sidebar-link">
                     <i class="bi bi-person-circle"></i>
                     <span>Profile</span>
                 </a>
             </li>
+            
             <li class="sidebar-item">
                 <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
-                    data-bs-target="#auth" aria-expanded="false" aria-controls="auth">
-                    <i class="lni lni-protection"></i>
-                    <span>Auth</span>
+                    data-bs-target="#products" aria-expanded="false" aria-controls="products">
+                    <i class="bi bi-backpack2-fill"></i>
+                    <span>Products</span>
                 </a>
-                <ul id="auth" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+                <ul id="products" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
                     <li class="sidebar-item">
-                        <a href="#" class="sidebar-link">Login</a>
+                        <a href="/product" class="sidebar-link">Item List</a>
                     </li>
                     <li class="sidebar-item">
-                        <a href="#" class="sidebar-link">Register</a>
+                        <a href="/product/create" class="sidebar-link">Add Item</a>
                     </li>
                 </ul>
             </li>
+
             <li class="sidebar-item">
                 <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
-                    data-bs-target="#multi" aria-expanded="false" aria-controls="multi">
-                    <i class="lni lni-layout"></i>
-                    <span>Multi Level</span>
+                    data-bs-target="#orders" aria-expanded="false" aria-controls="orders">
+                    <i class="bi bi-receipt"></i>
+                    <span>Orders & Transactions</span>
                 </a>
-                <ul id="multi" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+                <ul id="orders" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
                     <li class="sidebar-item">
-                        <a href="#" class="sidebar-link collapsed" data-bs-toggle="collapse"
-                            data-bs-target="#multi-two" aria-expanded="false" aria-controls="multi-two">
-                            Two Links
-                        </a>
-                        <ul id="multi-two" class="sidebar-dropdown list-unstyled collapse">
-                            <li class="sidebar-item">
-                                <a href="#" class="sidebar-link">Link 1</a>
-                            </li>
-                            <li class="sidebar-item">
-                                <a href="#" class="sidebar-link">Link 2</a>
-                            </li>
-                        </ul>
+                        <a href="/order" class="sidebar-link">Order List</a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="/order/create" class="sidebar-link">Add Order</a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="/transaction/create" class="sidebar-link">Add Transaction</a>
                     </li>
                 </ul>
-            </li>
-            <li class="sidebar-item">
-                <a href="#" class="sidebar-link">
-                    <i class="lni lni-popup"></i>
-                    <span>Notification</span>
-                </a>
-            </li>
-            <li class="sidebar-item">
-                <a href="#" class="sidebar-link">
-                    <i class="lni lni-cog"></i>
-                    <span>Setting</span>
-                </a>
             </li>
         </ul>
         <div class="sidebar-footer">
             <form action="/logout" method="POST">
                 @csrf
                 <button type="submit" class="sidebar-link btn btn-link text-decoration-none text-white mx-2 mb-4">
-                    <i class="lni lni-exit"></i>
+                    <i class="bi bi-box-arrow-right"></i>
                     <span class="logout-text">Logout</span>
                 </button>
             </form>
         </div>
     </aside>
-    <div class="main p-3">
-        <div class="text-center">
-            <h1>
-                 
-            </h1>
-        </div>
-    </div>
-</div>
+{{-- </div> --}}
