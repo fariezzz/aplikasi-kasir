@@ -16,15 +16,9 @@
           @error('name')<div class="invalid-feedback">{{ $message }}</div>@enderror
         </div>
 
-        <div class="col-lg-6">
-          <label for="code" class="form-label">Code</label>
-          <input type="text" class="form-control @error('code') is-invalid @enderror" id="code" name="code" value="{{ old('code') }}" required>
-          @error('code')<div class="invalid-feedback">{{ $message }}</div>@enderror
-        </div>
-
         <div class="col-12">
           <label for="description" class="form-label">Description</label>
-          <textarea class="form-control @error('description') is-invalid @enderror" id="description" name="description" value="{{ old('description') }}"></textarea>
+          <textarea class="form-control @error('description') is-invalid @enderror" id="description" name="description">{{ old('description') }}</textarea>
         </div>
 
         <div class="col-lg-6">

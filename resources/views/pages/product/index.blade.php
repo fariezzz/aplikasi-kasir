@@ -15,6 +15,38 @@
     @endif
 
     <div class="container-fluid">
+        <div class="row justify-content-end">
+            <div class="col-lg-8">
+                <form action="/product" method="GET" class="row g-3">
+                    <div class="col-lg-5">
+                        <div>
+                            <select class="form-select" name="category" id="category">
+                                <option value="" selected>All Categories</option>
+                                @foreach($categories as $category)
+                                    <option value="{{ $category->slug }}" {{ request('category') == $category->slug ? 'selected' : '' }}>{{ $category->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-5">
+                        <div class="input-group">
+                            <input type="text" class="form-control" style="border-color:rgb(0, 0, 0);" placeholder="Search name..." name="search" value="{{ request('search') }}">
+                        </div>
+                    </div>
+
+                    <div class="col-lg-2 d-flex justify-content-between align-self-center">
+                        <button class="btn btn-primary" type="submit">Search</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="col">
+            <a href="/product/create" class="btn btn-primary mb-3">Add Item</a>
+            {{ $products->links() }}
+        </div>
+        
         <div class="row">
             @foreach ($products as $product)
             <div class="col-md-4 mb-3">

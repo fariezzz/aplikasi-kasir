@@ -15,11 +15,11 @@
                     <span>Profile</span>
                 </a>
             </li>
-            
+
             <li class="sidebar-item">
                 <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
                     data-bs-target="#products" aria-expanded="false" aria-controls="products">
-                    <i class="bi bi-backpack2-fill"></i>
+                    <i class="bi bi-box-fill"></i>
                     <span>Products</span>
                 </a>
                 <ul id="products" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
@@ -34,9 +34,41 @@
 
             <li class="sidebar-item">
                 <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
+                    data-bs-target="#category" aria-expanded="false" aria-controls="category">
+                    <i class="bi bi-tags-fill"></i>
+                    <span>Categories</span>
+                </a>
+                <ul id="category" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+                    <li class="sidebar-item">
+                        <a href="/category" class="sidebar-link">Category List</a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="/category/create" class="sidebar-link">Add Category</a>
+                    </li>
+                </ul>
+            </li>
+
+            <li class="sidebar-item">
+                <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
+                    data-bs-target="#customers" aria-expanded="false" aria-controls="customers">
+                    <i class="bi bi-people-fill"></i>
+                    <span>Customers</span>
+                </a>
+                <ul id="customers" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+                    <li class="sidebar-item">
+                        <a href="/customer" class="sidebar-link">Customer List</a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="/customer/create" class="sidebar-link">Add Customer</a>
+                    </li>
+                </ul>
+            </li>
+
+            <li class="sidebar-item">
+                <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
                     data-bs-target="#orders" aria-expanded="false" aria-controls="orders">
                     <i class="bi bi-receipt"></i>
-                    <span>Orders & Transactions</span>
+                    <span>Orders</span>
                 </a>
                 <ul id="orders" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
                     <li class="sidebar-item">
@@ -45,11 +77,25 @@
                     <li class="sidebar-item">
                         <a href="/order/create" class="sidebar-link">Add Order</a>
                     </li>
+                </ul>
+            </li>
+            
+            <li class="sidebar-item">
+                <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
+                    data-bs-target="#transaction" aria-expanded="false" aria-controls="transaction">
+                    <i class="bi bi-credit-card"></i>
+                    <span>Transaction</span>
+                </a>
+                <ul id="transaction" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
                     <li class="sidebar-item">
-                        <a href="/transaction/create" class="sidebar-link">Add Transaction</a>
+                        <a href="/transaction" class="sidebar-link">Transaction List</a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="/transaction/create" class="sidebar-link">Add Data</a>
                     </li>
                 </ul>
             </li>
+
         </ul>
         <div class="sidebar-footer">
             <form action="/logout" method="POST">

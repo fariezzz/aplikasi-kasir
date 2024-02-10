@@ -4,7 +4,7 @@
 
 <div class="mx-3 container-fluid">
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 mt-2 pb-2 mb-3 border-bottom header">
-        <h3>Order List</h3>
+        <h3>Transaction</h3>
     </div>
 
     @if(session()->has('success'))
@@ -42,8 +42,7 @@
     </div>
 
     <div class="col">
-      <a href="/order/create" class="btn btn-primary mb-3">Add Order</a>
-      {{ $orders->links() }}
+      <a href="/transaction/create" class="btn btn-primary mb-3">Add Transaction</a>
     </div>
 
     <table class="table table-bordered" style="border-color:rgb(194, 194, 194);">
@@ -53,34 +52,44 @@
             <th scope="col" class="table-primary">Code</th>
             <th scope="col" class="table-primary">Customer</th>
             <th scope="col" class="table-primary">Product</th>
-            <th scope="col" class="table-primary">Quantity</th>
-            <th scope="col" class="table-primary">Total</th>
+            <th scope="col" class="table-primary">Total Price</th>
+            <th scope="col" class="table-primary">Date</th>
             <th scope="col" class="table-primary">Status</th>
             <th scope="col" class="table-primary">Actions</th>
           </tr>
         </thead>
         <tbody>
-            @foreach($orders as $order)
+            @foreach($transactions as $transaction)
               <tr>
                   <th scope="row">{{ $loop->iteration }}</th>
-                  <td>{{ $order->code }}</td>
-                  <td>{!! $order->customer->name . '<br>(' . $order->transaction->code . ')' !!}</td>
-                  <td>{{ $order->product->name }}</td>
-                  <td>{{ $order->quantity }}</td>
-                  <td>Rp. {{ number_format($order->total_price, 0, ',', '.') }}</td>
-                  <td>{{ $order->transaction->status }}</td>
-                  <td scope="col" class="d-flex justify-content-center">
-                    @if($order->transaction->status == 'Pending')
-                      <span>Not available</span>
-                      {{-- <a href="/transaction/{{ $order->transaction->code }}" class="btn btn-primary">
-                        <i class="bi bi-cash"></i>
-                         Pay
-                      </a> --}}
+                  <td>{{ $transaction->code }}</td>
+                  <td>{{ $transaction->customer->name }}</td>
+                  <td>
+                    @if($transaction->orders->count())
+                      @foreach ($transaction->orders as $index => $order)
+                          {{ $order->product->name . '(' . $order->quantity . ')' }}
+                          @if ($index < $transaction->orders->count() - 1)
+                              ,
+                          @endif
+                      @endforeach
                     @else
-                      <form action="/order/{{ $order->id }}" method="POST">
+                      No items
+                    @endif
+                  </td>
+                  <td>Rp. {{ number_format($transaction->orders->sum('total_price'), 0, ',', '.') }}</td>
+                  <td>{{ $transaction->date }}</td>
+                  <td>{{ $transaction->status }}</td>
+                  <td scope="col" class="d-flex justify-content-center">
+                    @if($transaction->status == 'Pending')
+                      <a href="/transaction/{{ $transaction->code }}" class="btn btn-primary">
+                        <i class="bi bi-arrow-right"></i>
+                         Proceed
+                      </a>
+                    @else
+                      <form action="/transaction/{{ $transaction->code }}" method="POST">
                         @method('delete')
                         @csrf
-                        <button class="btn btn-danger mx-2" onclick="confirm('Are you sure to delete the order?')"><i class="bi bi-trash3"></i> Delete</button>
+                        <button class="btn btn-danger mx-2" onclick="confirm('Are you sure to delete the transaction?')"><i class="bi bi-trash3"></i> Delete</button>
                       </form>
                     @endif
                   </td>
@@ -88,42 +97,5 @@
             @endforeach
         </tbody>
       </table>
-
-      {{-- <script>
-        document.addEventListener('DOMContentLoaded', function() {
-          let changeStatusButtons = document.querySelectorAll('.change-status');
-          
-          changeStatusButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                let transactionId = this.getAttribute('data-transaction-id');
-                let newStatus = this.classList.contains('btn-success') ? 'Done' : 'Cancelled';
-                changeTransactionStatus(transactionId, newStatus);
-            });
-          });
-
-          function changeTransactionStatus(transactionId, newStatus) {
-            fetch(`/change-status/${transactionId}`, {
-                method: 'PUT',
-                headers: {
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ status: newStatus })
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => {
-                location.reload();
-            })
-            .catch(error => {
-                console.error('There was an error!', error);
-            });
-          }
-        });
-    </script> --}}
 
 @endsection

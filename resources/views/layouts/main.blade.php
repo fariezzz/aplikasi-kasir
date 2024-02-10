@@ -14,13 +14,11 @@
 <body>
     @include('partials.sidebar')
     <div class="container">
-        
-    @yield('container')
+        <main>
+            @yield('container')
+        </main> 
     </div>
         </div>
-
-    {{-- JavaScript --}}
-    <script src="{{ asset('/bootstrap/vendor/twbs/bootstrap/dist/js/bootstrap.bundle.min.js') }}"></script>
 
     <script>
         function previewImage(){
@@ -37,7 +35,7 @@
             }
         }
     </script>
-    {{-- JavaScript --}}
-</body>
 
+    <script src="{{ asset('/bootstrap/vendor/twbs/bootstrap/dist/js/bootstrap.bundle.min.js') }}"></script>
+</body>
 </html>

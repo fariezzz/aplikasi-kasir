@@ -7,6 +7,7 @@ use App\Models\Product;
 use App\Models\Transaction;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Faker\Factory as FakerFactory;
 
 class OrderController extends Controller
 {
@@ -17,7 +18,7 @@ class OrderController extends Controller
     {
         return view('pages.order.index', [
             'title' => 'Item List',
-            'orders' => Order::all()
+            'orders' => Order::latest()->filter(request(['search', 'status']))->paginate(5)
         ]);
     }
 
@@ -26,7 +27,7 @@ class OrderController extends Controller
      */
     public function create()
     {
-        return view('pages.order.add', [
+        return view('pages.order.create', [
             'title' => 'Add Order',
             'users' => User::all(),
             'products' => Product::all(),
@@ -40,17 +41,24 @@ class OrderController extends Controller
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'code' => 'required|unique:orders',
             'transaction_id' => 'required',
             'product_id' => 'required',
             'quantity' => 'required',
             'total_price' => 'required',
         ]);
 
+        $uniqueCode = FakerFactory::create()->unique()->numerify('#-##');
+        while (Order::where('code', $uniqueCode)->exists()) {
+            $uniqueCode = FakerFactory::create()->unique()->numerify('#-##');
+        }
+        $validatedData['code'] = $uniqueCode;
+
         $transaction = Transaction::find($request['transaction_id']);
-        $validatedData['user_id'] = $transaction->user_id;
+        $validatedData['customer_id'] = $transaction->customer_id;
 
         Order::create($validatedData);
+
+        $transaction->update(['total_price' => $transaction->orders()->sum('total_price')]);
 
         return redirect('/order')->with('success', 'Order has been added');
     }
@@ -84,6 +92,8 @@ class OrderController extends Controller
      */
     public function destroy(Order $order)
     {
-        //
+        Order::destroy($order->id);
+
+        return back()->with('success', 'Order has been deleted.');
     }
 }

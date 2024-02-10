@@ -14,7 +14,11 @@ return new class extends Migration
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
-            $table->string('status')->enum(['Pending', 'Cancelled', 'Done']);
+            $table->unsignedBigInteger('customer_id');
+            $table->string('code')->unique();
+            $table->date('date');
+            $table->decimal('total_price', 10,2);
+            $table->string('status')->enum(['Pending', 'Cancelled', 'Done'])->default('Pending');
             $table->timestamps();
         });
     }

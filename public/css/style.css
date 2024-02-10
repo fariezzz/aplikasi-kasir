@@ -94,6 +94,26 @@ a.sidebar-link:hover {
     position: relative;
 }
 
+/* .pagination .page-link {
+    color: #0e2238;
+    background-color: #ffffff;
+    border-color: #0e2238;
+}
+
+.pagination .page-item.active .page-link {
+    color: #fff;
+    background-color: #0e2238;
+    border-color: #0e2238;
+} */
+
+.theme-color {
+    background-color: #0e2238;
+}
+
+.form-border {
+    border-color: black;
+}
+
 /* Desktop */
 @media only screen and (min-width: 768px) {
     #sidebar {

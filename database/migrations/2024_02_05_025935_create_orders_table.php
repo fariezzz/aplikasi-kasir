@@ -16,10 +16,10 @@ return new class extends Migration
             $table->string('code')->unique();
             $table->unsignedBigInteger('transaction_id');
             $table->unsignedBigInteger('product_id');
-            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('customer_id');
             $table->integer('quantity');
             $table->decimal('total_price', 10,2);
-            $table->timestamps();   
+            $table->timestamps();
         });
     }
 

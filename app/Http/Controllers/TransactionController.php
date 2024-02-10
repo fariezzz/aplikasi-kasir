@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Customer;
 use App\Models\Transaction;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Faker\Factory as FakerFactory;
 
 class TransactionController extends Controller
 {
@@ -13,7 +15,10 @@ class TransactionController extends Controller
      */
     public function index()
     {
-        
+        return view('pages.transaction.index', [
+            'title' => 'Transaction List',
+            'transactions' => Transaction::all()
+        ]);
     }
 
     /**
@@ -21,9 +26,10 @@ class TransactionController extends Controller
      */
     public function create()
     {
-        return view('pages.transaction.add', [
+        return view('pages.transaction.create', [
             'title' => 'Add Transaction',
-            'users' => User::all()
+            'users' => User::all(),
+            'customers' => Customer::all()
         ]);
     }
 
@@ -32,7 +38,23 @@ class TransactionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validatedData = $request->validate([
+            'customer_id' => 'required',
+            'user_id' => 'required',
+            'date' => 'required|date',
+        ]);
+
+        $uniqueCode = FakerFactory::create()->unique()->numerify('#-##');
+        while (Transaction::where('code', $uniqueCode)->exists()) {
+            $uniqueCode = FakerFactory::create()->unique()->numerify('#-##');
+        }
+        $validatedData['code'] = $uniqueCode;
+
+        $validatedData['total_price'] = 0;
+        
+        Transaction::create($validatedData);
+
+        return redirect('/transaction')->with('success', 'Data has been added');
     }
 
     /**

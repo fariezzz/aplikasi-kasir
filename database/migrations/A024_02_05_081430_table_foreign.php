@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::table('orders', function(Blueprint $table) {
             $table->foreign('transaction_id')->references('id')->on('transactions')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('customer_id')->references('id')->on('customers')->onDelete('cascade')->onUpdate('cascade');
         });
 
         Schema::table('products', function(Blueprint $table) {
@@ -24,6 +24,7 @@ return new class extends Migration
 
         Schema::table('transactions', function(Blueprint $table) {
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('customer_id')->references('id')->on('customers')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 

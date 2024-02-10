@@ -7,6 +7,7 @@ use App\Models\Product;
 use App\Models\Supplier;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Faker\Factory as FakerFactory;
 
 class ProductController extends Controller
 {
@@ -17,7 +18,8 @@ class ProductController extends Controller
     {
         return view('pages.product.index', [
             'title' => 'Items',
-            'products' => Product::all()
+            'products' => Product::latest()->filter(request(['search', 'category']))->paginate(6),
+            'categories' => Category::all()
         ]);
     }
 
@@ -26,7 +28,7 @@ class ProductController extends Controller
      */
     public function create()
     {
-        return view('pages.product.add', [
+        return view('pages.product.create', [
             'title' => 'Add Item',
             'categories' => Category::all(),
             'suppliers' => Supplier::all()
@@ -42,12 +44,17 @@ class ProductController extends Controller
             'name' => 'required|max:255',
             'category_id' => 'required',
             'supplier_id' => 'required',
-            'code' => 'required|max:6|unique:products',
             'description' => 'max:255|nullable',
             'stock' => 'integer|min:1',
             'price' => 'required',
             'image' => 'image|file|max:1024'
         ]);
+
+        $uniqueCode = FakerFactory::create()->unique()->numerify('#-##');
+        while (Product::where('code', $uniqueCode)->exists()) {
+            $uniqueCode = FakerFactory::create()->unique()->numerify('#-##');
+        }
+        $validatedData['code'] = $uniqueCode;
 
         if($request->file('image')){
             $validatedData['image'] = $request->file('image')->store('product-images');
@@ -88,16 +95,11 @@ class ProductController extends Controller
             'name' => 'required|max:255',
             'category_id' => 'required',
             'supplier_id' => 'required',
-            'code' => 'required|max:6|unique:products',
             'description' => 'max:255|nullable',
             'stock' => 'integer|min:1',
             'price' => 'required',
             'image' => 'image|file|max:1024'
         ]);
-
-        if($request->code != $product->code){
-            $validatedData['code'] = 'required|max:6|unique:products';
-        }
 
         if($request->file('image')){
             if($product->image){

@@ -16,7 +16,7 @@
     
     <div class="col">
 
-      <form class="row g-3" method="POST" action="/product/{{ $product->id }}" enctype="multipart/form-data">
+      <form class="row g-3" method="POST" action="/product/{{ $product->code }}" enctype="multipart/form-data">
         @method('put')
         @csrf
         <div class="col-lg-6">
@@ -25,15 +25,9 @@
           @error('name')<div class="invalid-feedback">{{ $message }}</div>@enderror
         </div>
 
-        <div class="col-lg-6">
-          <label for="code" class="form-label">Code</label>
-          <input type="text" class="form-control @error('code') is-invalid @enderror" id="code" name="code" value="{{ old('code', $product->code) }}" required autofocus>
-          @error('code')<div class="invalid-feedback">{{ $message }}</div>@enderror
-        </div>
-
         <div class="col-12">
           <label for="description" class="form-label">Description</label>
-          <textarea class="form-control @error('description') is-invalid @enderror" id="description" name="description" value="{{ old('description', $product->description) }}"></textarea>
+          <textarea class="form-control @error('description') is-invalid @enderror" id="description" name="description">{{ old('description', $product->description) }}</textarea>
         </div>
 
         <div class="col-lg-6">
@@ -50,6 +44,19 @@
                   <option value="{{ $category->id }}" selected>{{ $category->name }}</option>
                 @else
                   <option value="{{ $category->id }}">{{ $category->name }}</option>
+                @endif
+              @endforeach
+            </select>
+        </div>
+
+        <div class="col-lg-6">
+          <label for="supplier_id" class="form-label">Supplier</label>
+            <select class="form-select" name="supplier_id" id="supplier_id">
+              @foreach($suppliers as $supplier)
+                @if(old('supplier_id', $product->supplier_id) == $supplier->id)
+                  <option value="{{ $supplier->id }}" selected>{{ $supplier->name }}</option>
+                @else
+                  <option value="{{ $supplier->id }}">{{ $supplier->name }}</option>
                 @endif
               @endforeach
             </select>

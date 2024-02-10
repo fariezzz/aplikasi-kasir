@@ -6,6 +6,7 @@ namespace Database\Seeders;
 
 use App\Models\User;
 use App\Models\Category;
+use App\Models\Customer;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\Supplier;
@@ -19,6 +20,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        Customer::factory(8)->create();
+
         Category::create([
             'name' => 'Education',
             'slug' => 'education'
@@ -33,12 +36,7 @@ class DatabaseSeeder extends Seeder
 
         User::factory(10)->create();
         Product::factory(5)->create();
-
-        Transaction::create([
-            'user_id' => fake()->numberBetween(1, 11),
-            'status' => 'Pending'
-        ]);
-
+        
         User::factory()->create([
             'name' => 'Muhammad Fariez',
             'email' => 'rajameksiko@gmail.com',
@@ -47,6 +45,6 @@ class DatabaseSeeder extends Seeder
             'role' => 'Admin'
         ]);
 
-        Order::factory(5)->create();
+        Transaction::factory(5)->create();
     }
 }

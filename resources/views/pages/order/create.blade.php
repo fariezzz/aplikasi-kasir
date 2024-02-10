@@ -11,20 +11,14 @@
       <form class="row g-3" method="POST" action="/order">
         @csrf
         <div class="col-lg-6">
-          <label for="code" class="form-label">Code</label>
-          <input type="text" class="form-control @error('code') is-invalid @enderror" id="code" name="code" value="{{ old('code') }}" required autofocus>
-          @error('code')<div class="invalid-feedback">{{ $message }}</div>@enderror
-        </div>
-
-        <div class="col-lg-6">
           <label for="transaction_id" class="form-label">Transaction ID</label>
             <select class="form-select" name="transaction_id" id="transaction_id">
               @foreach($transactions as $transaction)
-                @if($transaction->status == 'Pending' && !$transaction->order)
+                @if($transaction->status == 'Pending')
                   @if(old('transaction_id') == $transaction->id)
-                    <option value="{{ $transaction->id }}" selected>{{ $transaction->id }} {{ '(' . $transaction->status . ')' }}</option>
+                    <option value="{{ $transaction->id }}" selected>{{ $transaction->customer->name }} {{ '(' . $transaction->code . ')' }}</option>
                   @else
-                    <option value="{{ $transaction->id }}">{{ $transaction->id }} {{ '(' . $transaction->status . ')' }}</option>
+                    <option value="{{ $transaction->id }}">{{ $transaction->customer->name }} {{ '(' . $transaction->code . ')' }}</option>
                   @endif
                 @endif
               @endforeach
