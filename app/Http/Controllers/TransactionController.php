@@ -31,7 +31,7 @@ class TransactionController extends Controller
 
         return view('pages.transaction.index', [
             'title' => 'Transaction List',
-            'transactions' => $transactions->get()
+            'transactions' => $transactions->paginate(5)
         ]);
     }
 

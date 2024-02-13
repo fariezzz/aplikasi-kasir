@@ -20,10 +20,10 @@
       </div>
     </div>
 
-    <a href="/customer/create" class="btn btn-primary mb-2">Add Customer</a>
+    <a href="/customer/create" class="btn btn-primary mb-2"><i class="bi bi-plus-circle"></i> Add Customer</a>
 
     @if($customers->count())
-    <table class="table table-bordered" style="border-color:rgb(194, 194, 194);">
+    <table class="table table-bordered text-center" style="border-color:rgb(194, 194, 194);">
         <thead>
           <tr>
             <th scope="col" class="table-primary">#</th>

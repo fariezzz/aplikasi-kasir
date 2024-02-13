@@ -34,8 +34,13 @@
       </div>
     </div>
 
-    <div class="col">
-      <a href="/transaction/create" class="btn btn-primary mb-3">Add Transaction</a>
+    <div class="col mb-3">
+      <a href="/transaction/create" class="btn btn-primary">
+        <i class="bi bi-cart4"></i> Pay Orders
+      </a>
+      <a href="/transaction/checkout-now" class="btn btn-primary ms-2">
+        <i class="bi bi-cart-check"></i> Checkout Now
+      </a>
     </div>
 
     @if($transactions->count())
@@ -92,5 +97,6 @@
       @else
       <h3 class="text-center">No data.</h3>
       @endif
+      {{ $transactions->appends(request()->input())->links() }}
 
 @endsection

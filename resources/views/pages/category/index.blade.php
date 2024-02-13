@@ -9,7 +9,7 @@
 
     @include('partials.alert')
 
-    <a href="/category/create" class="btn btn-primary mb-2">Add Category</a>
+    <a href="/category/create" class="btn btn-primary mb-2"><i class="bi bi-plus-circle"></i> Add Category</a>
 
     <div class="row text-center">
       <div class="col-lg-12">

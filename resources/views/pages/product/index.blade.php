@@ -38,7 +38,7 @@
         </div>
 
         <div class="col">
-            <a href="/product/create" class="btn btn-primary mb-3">Add Item</a>
+            <a href="/product/create" class="btn btn-primary mb-3"><i class="bi bi-plus-circle"></i> Add Item</a>
             {{ $products->links() }}
         </div>
         

@@ -8,8 +8,8 @@
     </div>
 
     <div class="col">
-        <a href="/transaction" class="btn btn-primary mb-3">Back</a>
-        <a href="/transaction/invoice/{{ $transaction->code }}" class="btn btn-secondary mb-3">Print</a>
+        <a href="/transaction" class="btn btn-primary mb-3"><i class="bi bi-arrow-left"></i> Back</a>
+        <a href="/transaction/invoice/{{ $transaction->code }}" class="btn btn-secondary mb-3"><i class="bi bi-printer"></i> Print</a>
     </div>
 
     <div class="d-flex justify-content-between mb-4">

@@ -37,12 +37,12 @@
     </div>
 
     <div class="col">
-      <a href="/order/create" class="btn btn-primary mb-3">Add Order</a>
+      <a href="/order/create" class="btn btn-primary mb-3"><i class="bi bi-plus-circle"></i> Add Order</a>
       {{ $orders->links() }}
     </div>
 
     @if($orders->count())
-    <table class="table table-bordered" style="border-color:rgb(194, 194, 194);">
+    <table class="table table-bordered text-center" style="border-color:rgb(194, 194, 194);">
         <thead>
           <tr>
             <th scope="col" class="table-primary">#</th>
