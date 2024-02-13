@@ -94,6 +94,11 @@ a.sidebar-link:hover {
     position: relative;
 }
 
+.form-control, .form-select {
+    border-radius: 8px;
+    border-color:rgb(100, 100, 100);
+}
+
 /* .pagination .page-link {
     color: #0e2238;
     background-color: #ffffff;
@@ -190,5 +195,9 @@ a.sidebar-link:hover {
 
     .header {
         width: 100vh;
+    }
+
+    .sort-button {
+        margin-bottom: 1rem;
     }
 }

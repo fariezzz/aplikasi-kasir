@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Customer;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\Transaction;
@@ -18,7 +19,7 @@ class OrderController extends Controller
     {
         return view('pages.order.index', [
             'title' => 'Item List',
-            'orders' => Order::latest()->filter(request(['search', 'status']))->paginate(5)
+            'orders' => Order::latest()->filter(request(['search', 'status']))->paginate(5)->withQueryString()
         ]);
     }
 
@@ -31,7 +32,8 @@ class OrderController extends Controller
             'title' => 'Add Order',
             'users' => User::all(),
             'products' => Product::all(),
-            'transactions' => Transaction::all()
+            'transactions' => Transaction::all(),
+            'customers' => Customer::all()
         ]);
     }
 
@@ -41,7 +43,8 @@ class OrderController extends Controller
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'transaction_id' => 'required',
+            'transaction_id' => 'nullable',
+            'customer_id' => 'required',
             'product_id' => 'required',
             'quantity' => 'required',
             'total_price' => 'required',
@@ -53,14 +56,13 @@ class OrderController extends Controller
         }
         $validatedData['code'] = $uniqueCode;
 
-        $transaction = Transaction::find($request['transaction_id']);
-        $validatedData['customer_id'] = $transaction->customer_id;
+        $product = Product::findOrFail($validatedData['product_id']);
+        $product->stock -= $validatedData['quantity'];
+        $product->save();
 
         Order::create($validatedData);
 
-        $transaction->update(['total_price' => $transaction->orders()->sum('total_price')]);
-
-        return redirect('/order')->with('success', 'Order has been added');
+        return redirect('/order')->with('success', 'Order has been added. <a href="/transaction/create">Pay here</a>');
     }
 
     /**
@@ -84,14 +86,26 @@ class OrderController extends Controller
      */
     public function update(Request $request, Order $order)
     {
-        //
+        $order->update(['status' => 'Cancelled']);
+
+        $product = Product::findOrFail($order['product_id']);
+        $product->stock += $order['quantity'];
+        $product->save();
+
+        $request->session()->forget('selected_orders');
+
+        return back()->with('success', 'Order has been cancelled');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Order $order)
+    public function destroy(Request $request, Order $order)
     {
+        $order->transaction()->delete();
+
+        $request->session()->forget('selected_orders');
+
         Order::destroy($order->id);
 
         return back()->with('success', 'Order has been deleted.');

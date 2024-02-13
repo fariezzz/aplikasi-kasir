@@ -22,7 +22,6 @@ class TransactionFactory extends Factory
             'code' => fake()->numerify('#-##'),
             'date' => now(),
             'total_price' => 0,
-            'status' => 'Pending'
         ];
     }
 }

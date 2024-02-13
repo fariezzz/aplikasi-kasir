@@ -11,15 +11,13 @@
       <form class="row g-3" method="POST" action="/order">
         @csrf
         <div class="col-lg-6">
-          <label for="transaction_id" class="form-label">Transaction ID</label>
-            <select class="form-select" name="transaction_id" id="transaction_id">
-              @foreach($transactions as $transaction)
-                @if($transaction->status == 'Pending')
-                  @if(old('transaction_id') == $transaction->id)
-                    <option value="{{ $transaction->id }}" selected>{{ $transaction->customer->name }} {{ '(' . $transaction->code . ')' }}</option>
-                  @else
-                    <option value="{{ $transaction->id }}">{{ $transaction->customer->name }} {{ '(' . $transaction->code . ')' }}</option>
-                  @endif
+          <label for="customer_id" class="form-label">Customer ID</label>
+            <select class="form-select" name="customer_id" id="customer_id">
+              @foreach($customers as $customer)
+                @if(old('customer_id') == $customer->id)
+                  <option value="{{ $customer->id }}" selected>{{ $customer->name }}</option>
+                @else
+                  <option value="{{ $customer->id }}">{{ $customer->name }}</option>
                 @endif
               @endforeach
             </select>
@@ -27,7 +25,7 @@
 
         <div class="col-lg-6">
           <label for="product_id" class="form-label">Product</label>
-            <select class="form-select" name="product_id" id="product_id">
+            <select class="form-select" name="product_id" id="product_id" required>
               @foreach($products as $product)
                 @if(old('product_id') == $product->id)
                   <option value="{{ $product->id }}" selected>{{ $product->name }}</option>
@@ -40,7 +38,7 @@
 
         <div class="col-lg-6">
           <label for="quantity" class="form-label">Quantity</label>
-          <input type="number" min="1" class="form-control @error('quantity') is-invalid @enderror" id="quantity" name="quantity" value="{{ old('quantity') }}" required>
+          <input type="number" min="1" class="form-control @error('quantity') is-invalid @enderror" id="quantity" name="quantity" value="{{ old('quantity', 1 ) }}" required>
           @error('quantity')<div class="invalid-feedback">{{ $message }}</div>@enderror
         </div>
 
@@ -62,23 +60,35 @@
 <script>
   function calculateTotalPrice() {
     let productId = document.getElementById('product_id').value;
-    let quantity = document.getElementById('quantity').value;
+    let quantityInput = document.getElementById('quantity');
+    let quantity = quantityInput.value;
 
     let product = @json($products->toArray());
 
     let selectedProduct = product.find(function(prod) {
-    return prod.id == productId;
+        return prod.id == productId;
     });
+
+    if (!selectedProduct) {
+        return;
+    }
+
+    quantityInput.setAttribute('max', selectedProduct.stock);
+
+    if (quantity > selectedProduct.stock) {
+        quantityInput.value = selectedProduct.stock;
+        quantity = selectedProduct.stock;
+    }
 
     let totalPrice = selectedProduct.price * quantity;
 
     document.getElementById('total_price').value = totalPrice;
-  }
+}
 
-  document.getElementById('product_id').addEventListener('change', calculateTotalPrice);
-  document.getElementById('quantity').addEventListener('input', calculateTotalPrice);
+document.getElementById('product_id').addEventListener('change', calculateTotalPrice);
+document.getElementById('quantity').addEventListener('input', calculateTotalPrice);
 
-  calculateTotalPrice();
+calculateTotalPrice();
 
 </script>
 

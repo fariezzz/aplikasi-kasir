@@ -35,7 +35,6 @@ class DatabaseSeeder extends Seeder
         Supplier::factory(5)->create();
 
         User::factory(10)->create();
-        Product::factory(5)->create();
         
         User::factory()->create([
             'name' => 'Muhammad Fariez',
@@ -44,7 +43,5 @@ class DatabaseSeeder extends Seeder
             'password' => bcrypt('12345'),
             'role' => 'Admin'
         ]);
-
-        Transaction::factory(5)->create();
     }
 }

@@ -18,7 +18,6 @@ return new class extends Migration
             $table->string('code')->unique();
             $table->date('date');
             $table->decimal('total_price', 10,2);
-            $table->string('status')->enum(['Pending', 'Cancelled', 'Done'])->default('Pending');
             $table->timestamps();
         });
     }

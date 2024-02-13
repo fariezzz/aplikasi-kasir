@@ -8,6 +8,7 @@
     <title>BookHaven | {{ $title }}</title>
     <link href="{{ asset('/bootstrap/vendor/twbs/bootstrap/dist/css/bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{ asset('/bootstrap-icons/vendor/twbs/bootstrap-icons/font/bootstrap-icons.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href=" https://printjs-4de6.kxcdn.com/print.min.css">
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
 </head>
 

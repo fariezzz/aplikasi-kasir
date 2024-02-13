@@ -39,4 +39,19 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function getRouteKeyName()
+    {
+        return 'username';
+    }
+
+    public function scopeFilter($query, array $filters){
+        $query->when($filters['search'] ?? false, function($query, $search){
+            $query->where(function($query) use($search){
+                $query->where('name', 'like', '%' . $search . '%');
+            });
+        })->when($filters['role'] ?? false, function($query, $status){
+            $query->where('role', $status);
+        });
+    }
 }

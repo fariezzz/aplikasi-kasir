@@ -7,12 +7,7 @@
         <h3>Customer List</h3>
     </div>
 
-    @if(session()->has('success'))
-      <div class="alert alert-success alert-dismissible fade show col" role="alert">
-        {{ session('success') }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-      </div>
-    @endif
+    @include('partials.alert')
 
     <div class="row justify-content-end">
       <div class="col-md-4">
@@ -27,6 +22,7 @@
 
     <a href="/customer/create" class="btn btn-primary mb-2">Add Customer</a>
 
+    @if($customers->count())
     <table class="table table-bordered" style="border-color:rgb(194, 194, 194);">
         <thead>
           <tr>
@@ -58,6 +54,9 @@
             @endforeach
         </tbody>
       </table>
+      @else
+      <h3 class="text-center">No data.</h3>
+      @endif
       
       <div class="mb-3">
         {{ $customers->links() }}

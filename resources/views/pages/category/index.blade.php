@@ -7,17 +7,13 @@
         <h3>Category List</h3>
     </div>
 
-    @if(session()->has('success'))
-      <div class="alert alert-success alert-dismissible fade show col" role="alert">
-        {{ session('success') }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-      </div>
-    @endif
+    @include('partials.alert')
 
     <a href="/category/create" class="btn btn-primary mb-2">Add Category</a>
 
-    <div class="row">
-      <div class="col-lg-7">
+    <div class="row text-center">
+      <div class="col-lg-12">
+        @if($categories->count())
         <table class="table table-bordered" style="border-color:rgb(194, 194, 194);">
           <thead>
             <tr>
@@ -45,6 +41,9 @@
               @endforeach
           </tbody>
         </table>
+        @else
+        <h3 class="text-center">No data.</h3>
+        @endif
       </div>
     </div>
       

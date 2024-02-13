@@ -7,12 +7,7 @@
         <h3>Order List</h3>
     </div>
 
-    @if(session()->has('success'))
-      <div class="alert alert-success alert-dismissible fade show col" role="alert">
-        {{ session('success') }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-      </div>
-    @endif
+    @include('partials.alert')
 
     <div class="row justify-content-end mb-4">
       <div class="col-lg-8">
@@ -46,6 +41,7 @@
       {{ $orders->links() }}
     </div>
 
+    @if($orders->count())
     <table class="table table-bordered" style="border-color:rgb(194, 194, 194);">
         <thead>
           <tr>
@@ -60,70 +56,40 @@
           </tr>
         </thead>
         <tbody>
-            @foreach($orders as $order)
+            @foreach($orders as $index => $order)
               <tr>
-                  <th scope="row">{{ $loop->iteration }}</th>
+                  <th scope="row">{{ $index + $orders->firstItem() }}</th>
                   <td>{{ $order->code }}</td>
-                  <td>{!! $order->customer->name . '<br>(' . $order->transaction->code . ')' !!}</td>
+                  <td>{{ $order->customer->name }}</td>
                   <td>{{ $order->product->name }}</td>
                   <td>{{ $order->quantity }}</td>
                   <td>Rp. {{ number_format($order->total_price, 0, ',', '.') }}</td>
-                  <td>{{ $order->transaction->status }}</td>
+                  <td>{{ $order->status }}</td>
                   <td scope="col" class="d-flex justify-content-center">
-                    @if($order->transaction->status == 'Pending')
-                      <span>Not available</span>
-                      {{-- <a href="/transaction/{{ $order->transaction->code }}" class="btn btn-primary">
-                        <i class="bi bi-cash"></i>
-                         Pay
-                      </a> --}}
+                    @if($order->status == 'Done' || $order->status == 'Cancelled')
+                    <form action="/order/{{ $order->id }}" method="POST">
+                      @method('delete')
+                      @csrf
+                      <button class="btn btn-danger mx-2" onclick="confirm('Are you sure to delete the order?')">
+                        <i class="bi bi-trash3"></i> Delete
+                      </button>
+                    </form>
                     @else
-                      <form action="/order/{{ $order->id }}" method="POST">
-                        @method('delete')
-                        @csrf
-                        <button class="btn btn-danger mx-2" onclick="confirm('Are you sure to delete the order?')"><i class="bi bi-trash3"></i> Delete</button>
-                      </form>
+                    <form action="/order/{{ $order->id }}" method="POST">
+                      @method('put')
+                      @csrf
+                      <button class="btn btn-danger mx-2" onclick="confirm('Are you sure to cancel the order?')">
+                        <i class="bi bi-x-circle"></i> Cancel
+                      </button>
+                    </form>
                     @endif
                   </td>
               </tr>
             @endforeach
         </tbody>
       </table>
-
-      {{-- <script>
-        document.addEventListener('DOMContentLoaded', function() {
-          let changeStatusButtons = document.querySelectorAll('.change-status');
-          
-          changeStatusButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                let transactionId = this.getAttribute('data-transaction-id');
-                let newStatus = this.classList.contains('btn-success') ? 'Done' : 'Cancelled';
-                changeTransactionStatus(transactionId, newStatus);
-            });
-          });
-
-          function changeTransactionStatus(transactionId, newStatus) {
-            fetch(`/change-status/${transactionId}`, {
-                method: 'PUT',
-                headers: {
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ status: newStatus })
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => {
-                location.reload();
-            })
-            .catch(error => {
-                console.error('There was an error!', error);
-            });
-          }
-        });
-    </script> --}}
+      @else
+        <h3 class="text-center">No data.</h3>
+      @endif
 
 @endsection

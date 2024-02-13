@@ -16,12 +16,8 @@ class Order extends Model
             $query->whereHas('customer', function($query) use ($search) {
                 $query->where('name', 'like', '%' . $search . '%');
             });
-        });
-
-        $query->when($filters['status'] ?? false, function($query, $status){
-            $query->whereHas('transaction', function($query) use ($status) {
-                $query->where('status', $status);
-            });
+        })->when($filters['status'] ?? false, function($query, $status){
+            $query->where('status', $status);
         });
     }
 

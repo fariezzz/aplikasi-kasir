@@ -10,10 +10,26 @@
         </div>
         <ul class="sidebar-nav py-3">
             <li class="sidebar-item">
-                <a href="#" class="sidebar-link">
+                <a href="/profile" class="sidebar-link">
                     <i class="bi bi-person-circle"></i>
                     <span>Profile</span>
                 </a>
+            </li>
+
+            <li class="sidebar-item">
+                <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
+                    data-bs-target="#users" aria-expanded="false" aria-controls="users">
+                    <i class="bi bi-person-vcard"></i>
+                    <span>Users</span>
+                </a>
+                <ul id="users" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+                    <li class="sidebar-item">
+                        <a href="/users" class="sidebar-link">User List</a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="/users/create" class="sidebar-link">Add User</a>
+                    </li>
+                </ul>
             </li>
 
             <li class="sidebar-item">
@@ -34,11 +50,11 @@
 
             <li class="sidebar-item">
                 <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
-                    data-bs-target="#category" aria-expanded="false" aria-controls="category">
+                    data-bs-target="#_category" aria-expanded="false" aria-controls="_category">
                     <i class="bi bi-tags-fill"></i>
                     <span>Categories</span>
                 </a>
-                <ul id="category" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+                <ul id="_category" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
                     <li class="sidebar-item">
                         <a href="/category" class="sidebar-link">Category List</a>
                     </li>
@@ -79,21 +95,12 @@
                     </li>
                 </ul>
             </li>
-            
+
             <li class="sidebar-item">
-                <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
-                    data-bs-target="#transaction" aria-expanded="false" aria-controls="transaction">
+                <a href="/transaction" class="sidebar-link">
                     <i class="bi bi-credit-card"></i>
                     <span>Transaction</span>
                 </a>
-                <ul id="transaction" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
-                    <li class="sidebar-item">
-                        <a href="/transaction" class="sidebar-link">Transaction List</a>
-                    </li>
-                    <li class="sidebar-item">
-                        <a href="/transaction/create" class="sidebar-link">Add Data</a>
-                    </li>
-                </ul>
             </li>
 
         </ul>

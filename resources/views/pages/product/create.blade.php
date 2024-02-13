@@ -23,7 +23,7 @@
 
         <div class="col-lg-6">
           <label for="stock" class="form-label">Stock</label>
-          <input type="number" min="1" class="form-control @error('stock') is-invalid @enderror" id="stock" name="stock" value="{{ old('stock') }}" required>
+          <input type="number" class="form-control @error('stock') is-invalid @enderror" id="stock" name="stock" value="{{ old('stock') }}" required>
           @error('stock')<div class="invalid-feedback">{{ $message }}</div>@enderror
         </div>
 
