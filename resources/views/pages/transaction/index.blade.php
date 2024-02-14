@@ -40,7 +40,7 @@
       </a>
       <a href="/transaction/checkout-now" class="btn btn-primary ms-2">
         <i class="bi bi-cart-check"></i> Checkout Now
-      </a>
+      </a>    
     </div>
 
     @if($transactions->count())
@@ -57,30 +57,20 @@
           </tr>
         </thead>
         <tbody>
-            @foreach($transactions as $transaction)
+            @foreach($transactions as $index => $transaction)
               <tr>
-                  <th scope="row">{{ $loop->iteration }}</th>
+                  <th scope="row">{{ $index + $transactions->firstItem() }}</th>
                   <td>{{ $transaction->code }}</td>
                   <td>{{ $transaction->customer->name }}</td>
                   <td>
-                    @php
-                        $groupedOrders = $transaction->orders->groupBy('product_id');
-                    @endphp
-                    
-                    @foreach($groupedOrders as $productId => $orders)
-                        @php
-                            $productName = $orders->first()->product->name;
-                            $totalQuantity = $orders->sum('quantity');
-                        @endphp
-                        
-                        {{ $productName }} ({{ $totalQuantity }})
-                        
-                        @if (!$loop->last)
-                            ,
+                    @foreach(json_decode($transaction->product_id) as $key => $product_id)
+                        {{ $products->where('id', $product_id)->first()->name }}({{ json_decode($transaction->quantity)[$key] }})
+                        @if(!$loop->last)
+                            <br>
                         @endif
                     @endforeach
                   </td>
-                  <td>Rp. {{ number_format($transaction->orders->sum('total_price'), 0, ',', '.') }}</td>
+                  <td>Rp. {{ number_format($transaction->total_price, 0, ',', '.') }}</td>
                   <td>{{ \Carbon\Carbon::parse($transaction->date)->format('M d, Y') }}</td>
                   <td scope="col" class="d-flex justify-content-center">
                     <a href="/transaction/{{ $transaction->code }}" class="btn btn-primary mx-2" ><i class="bi bi-eye-fill"></i></a>

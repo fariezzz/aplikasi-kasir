@@ -87,6 +87,6 @@ class CategoryController extends Controller
     {
         Category::destroy($category->id);
 
-        return back()->with('success', 'Category has been deleted');
+        return back()->with('success', 'Category has been deleted.');
     }
 }

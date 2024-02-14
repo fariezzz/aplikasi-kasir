@@ -15,8 +15,10 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('customer_id');
+            $table->json('product_id');
             $table->string('code')->unique();
-            $table->date('date');
+            $table->json('quantity');
+            $table->dateTime('date');
             $table->decimal('total_price', 10,2);
             $table->timestamps();
         });

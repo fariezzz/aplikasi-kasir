@@ -62,7 +62,7 @@ class ProductController extends Controller
 
         Product::create($validatedData);
 
-        return redirect('/product')->with('success', 'Item added.');
+        return redirect('/product')->with('success', 'Item has been added.');
     }
 
     /**

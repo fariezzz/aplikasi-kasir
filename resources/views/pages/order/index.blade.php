@@ -48,8 +48,7 @@
             <th scope="col" class="table-primary">#</th>
             <th scope="col" class="table-primary">Code</th>
             <th scope="col" class="table-primary">Customer</th>
-            <th scope="col" class="table-primary">Product</th>
-            <th scope="col" class="table-primary">Quantity</th>
+            <th scope="col" class="table-primary">Product (qty)</th>
             <th scope="col" class="table-primary">Total</th>
             <th scope="col" class="table-primary">Status</th>
             <th scope="col" class="table-primary">Actions</th>
@@ -61,8 +60,14 @@
                   <th scope="row">{{ $index + $orders->firstItem() }}</th>
                   <td>{{ $order->code }}</td>
                   <td>{{ $order->customer->name }}</td>
-                  <td>{{ $order->product->name }}</td>
-                  <td>{{ $order->quantity }}</td>
+                  <td>
+                    @foreach(json_decode($order->product_id) as $key => $product_id)
+                      {{ $products->where('id', $product_id)->first()->name }}({{ json_decode($order->quantity)[$key] }})
+                      @if(!$loop->last)
+                          <br>
+                      @endif
+                    @endforeach
+                  </td>
                   <td>Rp. {{ number_format($order->total_price, 0, ',', '.') }}</td>
                   <td>{{ $order->status }}</td>
                   <td scope="col" class="d-flex justify-content-center">

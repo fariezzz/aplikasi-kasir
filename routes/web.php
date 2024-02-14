@@ -55,7 +55,10 @@ Route::resource('/customer', CustomerController::class);
 
 Route::resource('/order', OrderController::class);
 
+Route::get('/transaction/checkout-now', [TransactionController::class, 'checkoutNow']);
+Route::get('/transaction/pay-order/{order:code}', [TransactionController::class, 'payOrder']);
 Route::resource('/transaction', TransactionController::class);
+Route::post('/transaction/pay-now', [TransactionController::class, 'payNow']);
 Route::get('/transaction/invoice/{code}', [TransactionController::class, 'template'])->name('invoice.print');
 Route::post('/add-to-selected-order/{order}', [TransactionController::class, 'addToSelectedOrder'])->name('add.selected.order');
 Route::post('/remove-from-selected-order/{order}', [TransactionController::class, 'removeFromSelectedOrder'])->name('remove.selected.order');

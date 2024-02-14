@@ -6,6 +6,7 @@ use App\Models\Customer;
 use App\Models\Transaction;
 use App\Models\User;
 use App\Models\Order;
+use App\Models\Product;
 use Illuminate\Http\Request;
 use Faker\Factory as FakerFactory;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -20,17 +21,18 @@ class TransactionController extends Controller
         $transactions = Transaction::query();
         if ($request->has('sort')) {
             if ($request->sort == 'asc') {
-                $transactions->orderBy('date', 'asc');
-            } elseif ($request->sort == 'desc') {
                 $transactions->orderBy('date', 'desc');
+            } elseif ($request->sort == 'desc') {
+                $transactions->orderBy('date', 'asc');
             }
         }
         else {
-            $transactions->orderBy('date', 'asc');
+            $transactions->orderBy('date', 'desc');
         }
 
         return view('pages.transaction.index', [
             'title' => 'Transaction List',
+            'products' => Product::all(),
             'transactions' => $transactions->paginate(5)
         ]);
     }
@@ -44,9 +46,9 @@ class TransactionController extends Controller
         $unselectedOrders = Order::all()->diff($selectedOrders);
         return view('pages.transaction.create', [
             'title' => 'Add Transaction',
-            'users' => User::all(),
             'customers' => Customer::all(),
             'orders' => Order::all(),
+            'products' => Product::all(),
             'selectedOrders' => $selectedOrders,
             'unselectedOrders' => $unselectedOrders
         ]);
@@ -90,7 +92,7 @@ class TransactionController extends Controller
 
         $request->session()->forget('selected_orders');
 
-        return redirect('/transaction')->with('success', 'Data has been added. Print <a href="' . route('invoice.print', $transaction->code) . '">here</a>');
+        return redirect('/transaction')->with('success', 'Data has been added. Print <a href="' . route('invoice.print', $transaction->code) . '" class="text-decoration-underline">here.</a>');
     }
 
     /**
@@ -100,7 +102,8 @@ class TransactionController extends Controller
     {
         return view('pages.transaction.show', [
             'title' => 'Invoice',
-            'transaction' => $transaction
+            'transaction' => $transaction,
+            'products' => Product::all(),
         ]);
     }
 
@@ -158,16 +161,54 @@ class TransactionController extends Controller
 
     public function template($code){
         $transaction = Transaction::where('code', $code)->first();
-        // $title = 'Invoice';
-
-        // if(request('output') == 'pdf') {
-        //     $pdf = Pdf::loadView('pages.transaction.invoice', compact('title', 'transaction'));
-        //     return $pdf->download('invoice.pdf');
-        // }
 
         return view('pages.transaction.invoice', [
             'title' => 'Invoice',
-            'transaction' => $transaction
+            'transaction' => $transaction,
+            'products' => Product::all(),
         ]);
+    }
+
+    public function checkoutNow(){
+        return view('pages.transaction.checkout_now', [
+            'title' => 'Pay Now',
+            'customers' => Customer::all(),
+            'products' => Product::all(),
+        ]);
+    }
+
+    public function payNow(Request $request){
+        $validatedData = $request->validate([
+            'customer_id' => 'required|exists:customers,id',
+            'product_id' => 'required|array',
+            'product_id.*' => 'exists:products,id',
+            'quantity' => 'required|array',
+            'quantity.*' => 'integer|min:1',
+            'total_price' => 'required|numeric|min:0',
+        ]);
+
+        $validatedData['product_id'] = json_encode($request->product_id);
+        $validatedData['quantity'] = json_encode($request->quantity);
+    
+        $validatedData['user_id'] = auth()->user()->id; 
+        $validatedData['customer_id'] = $request->customer_id;
+        $validatedData['total_price'] = $request->total_price;
+        $validatedData['date'] = now();
+
+        $uniqueCode = FakerFactory::create()->unique()->numerify('#-##');
+        while (Transaction::where('code', $uniqueCode)->exists()) {
+            $uniqueCode = FakerFactory::create()->unique()->numerify('#-##');
+        }
+        $validatedData['code'] = $uniqueCode;
+
+        Transaction::create($validatedData);
+
+        foreach ($request->product_id as $index => $product_id) {
+            $product = Product::find($product_id);
+            $product->stock -= $request->quantity[$index];
+            $product->save();
+        }
+    
+        return redirect('/transaction')->with('success', 'Transaction has been saved. Print <a href="' . route('invoice.print', $validatedData['code']) . '" class="text-decoration-underline">here</a>');
     }
 }

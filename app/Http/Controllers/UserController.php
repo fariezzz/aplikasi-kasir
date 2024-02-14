@@ -38,7 +38,7 @@ class UserController extends Controller
 
         User::create($validatedData);
 
-        return redirect('/users')->with('success', 'User has been added');
+        return redirect('/users')->with('success', 'User has been added.');
     }
 
     public function show(){
@@ -82,6 +82,6 @@ class UserController extends Controller
     public function destroy(User $user){
         User::destroy($user->id);
 
-        return back()->with('success', 'User has been deleted');
+        return back()->with('success', 'User has been deleted.');
     }
 }

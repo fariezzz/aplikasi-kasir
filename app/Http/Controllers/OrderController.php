@@ -19,7 +19,8 @@ class OrderController extends Controller
     {
         return view('pages.order.index', [
             'title' => 'Item List',
-            'orders' => Order::latest()->filter(request(['search', 'status']))->paginate(5)->withQueryString()
+            'orders' => Order::latest()->filter(request(['search', 'status']))->paginate(5)->withQueryString(),
+            'products' => Product::all()    
         ]);
     }
 
@@ -43,12 +44,20 @@ class OrderController extends Controller
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'transaction_id' => 'nullable',
-            'customer_id' => 'required',
-            'product_id' => 'required',
-            'quantity' => 'required',
-            'total_price' => 'required',
+            'customer_id' => 'required|exists:customers,id',
+            'product_id' => 'required|array',
+            'product_id.*' => 'exists:products,id',
+            'quantity' => 'required|array',
+            'quantity.*' => 'integer|min:1',
+            'total_price' => 'required|numeric|min:0',
         ]);
+
+        $validatedData['product_id'] = json_encode($request->product_id);
+        $validatedData['quantity'] = json_encode($request->quantity);
+    
+        $validatedData['customer_id'] = $request->customer_id;
+        $validatedData['total_price'] = $request->total_price;
+        $validatedData['status'] = 'Pending';
 
         $uniqueCode = FakerFactory::create()->unique()->numerify('#-##');
         while (Order::where('code', $uniqueCode)->exists()) {
@@ -56,13 +65,15 @@ class OrderController extends Controller
         }
         $validatedData['code'] = $uniqueCode;
 
-        $product = Product::findOrFail($validatedData['product_id']);
-        $product->stock -= $validatedData['quantity'];
-        $product->save();
-
         Order::create($validatedData);
 
-        return redirect('/order')->with('success', 'Order has been added. <a href="/transaction/create">Pay here</a>');
+        foreach ($request->product_id as $index => $product_id) {
+            $product = Product::find($product_id);
+            $product->stock -= $request->quantity[$index];
+            $product->save();
+        }
+    
+        return redirect('/order')->with('success', 'Order has been added. Pay <a href="/transaction/create" class="text-decoration-underline">here.</a>');
     }
 
     /**
@@ -86,15 +97,17 @@ class OrderController extends Controller
      */
     public function update(Request $request, Order $order)
     {
-        $order->update(['status' => 'Cancelled']);
+        foreach (json_decode($order->product_id) as $index => $product_id) {
+            $product = Product::find($product_id);
+            $product->stock += json_decode($order->quantity)[$index];
+            $product->save();
+        }
 
-        $product = Product::findOrFail($order['product_id']);
-        $product->stock += $order['quantity'];
-        $product->save();
+        $order->update(['status' => 'Cancelled']);
 
         $request->session()->forget('selected_orders');
 
-        return back()->with('success', 'Order has been cancelled');
+        return back()->with('success', 'Order has been cancelled.');
     }
 
     /**

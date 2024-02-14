@@ -60,12 +60,12 @@
                     </tr>
                     </thead>
                     <tbody>
-                        @foreach($transaction->orders as $order)
+                        @foreach(json_decode($transaction->product_id) as $key => $product_id)
                             <tr>
-                                <td>{{ $order->product->name }}</td>
-                                <td>{{ $order->quantity}}</td>
-                                <td>Rp. {{ number_format($order->product->price, 0, ',', ',') }}</td>
-                                <td>Rp. {{ number_format($order->quantity * $order->product->price, 0, ',', ',') }}</td>
+                                <td>{{ $products->where('id', $product_id)->first()->name }}</td>
+                                <td>{{ json_decode($transaction->quantity)[$key] }}</td>
+                                <td>Rp. {{ number_format($products->where('id', $product_id)->first()->price, 0, ',', ',') }}</td>
+                                <td>Rp. {{ number_format(json_decode($transaction->quantity)[$key] * $products->where('id', $product_id)->first()->price, 0, ',', ',') }}</td>
                             </tr>
                         @endforeach
                     </tbody>

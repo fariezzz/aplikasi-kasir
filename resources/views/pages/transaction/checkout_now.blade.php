@@ -8,7 +8,7 @@
     </div>
     
     <div class="col-lg-12 container-fluid">
-      <form class="row g-3" method="POST" action="/order">
+      <form class="row g-3" method="POST" action="/transaction/pay-now">
         @csrf
         <div class="col-lg-6">
           <label for="customer_id" class="form-label">Customer</label>
@@ -169,6 +169,38 @@
   $(document).ready(function() {
       emptyTable()
   })
+
+//   function calculateTotalPrice() {
+//     let productId = document.getElementById('product_id').value;
+//     let quantityInput = document.getElementById('quantity');
+//     let quantity = quantityInput.value;
+
+//     let product = @json($products->toArray());
+
+//     let selectedProduct = product.find(function(prod) {
+//         return prod.id == productId;
+//     });
+
+//     if (!selectedProduct) {
+//         return;
+//     }
+
+//     quantityInput.setAttribute('max', selectedProduct.stock);
+
+//     if (quantity > selectedProduct.stock) {
+//         quantityInput.value = selectedProduct.stock;
+//         quantity = selectedProduct.stock;
+//     }
+
+//     let totalPrice = selectedProduct.price * quantity;
+
+//     document.getElementById('total_price').value = totalPrice;
+// }
+
+// document.getElementById('product_id').addEventListener('change', calculateTotalPrice);
+// document.getElementById('quantity').addEventListener('input', calculateTotalPrice);
+
+// calculateTotalPrice();
 
 </script>
 

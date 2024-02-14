@@ -43,7 +43,7 @@ class CustomerController extends Controller
 
         Customer::create($validatedData);
 
-        return redirect('/customer')->with('success', 'Customer has been added');
+        return redirect('/customer')->with('success', 'Customer has been added.');
     }
 
     /**
@@ -78,7 +78,7 @@ class CustomerController extends Controller
 
         Customer::where('id', $customer->id)->update($validatedData);
 
-        return redirect('/customer')->with('success', 'Customer has been updated');
+        return redirect('/customer')->with('success', 'Customer has been updated.');
     }
 
     /**
