@@ -33,7 +33,7 @@ class TransactionController extends Controller
         return view('pages.transaction.index', [
             'title' => 'Transaction List',
             'products' => Product::all(),
-            'transactions' => $transactions->paginate(5)
+            'transactions' => $transactions->filter(request(['search']))->paginate(5)
         ]);
     }
 
@@ -85,12 +85,6 @@ class TransactionController extends Controller
         $validatedData['code'] = $uniqueCode;
 
         $transaction = Transaction::create($validatedData);
-
-        foreach ($request->product_id as $index => $product_id) {
-            $product = Product::find($product_id);
-            $product->stock -= $request->quantity[$index];
-            $product->save();
-        }
 
         $order->transaction_id = $transaction->id;
         $order->status = 'Done';
@@ -156,6 +150,10 @@ class TransactionController extends Controller
     }
 
     public function payNow(Request $request){
+        if (empty($request->product_id)) {
+            return back()->with('error', 'Product ID cannot be empty. Pick at least one item.');
+        }
+
         if($request->amount_paid < $request->total_price){
             return back()->with('error', 'Insufficient funds.');
         }

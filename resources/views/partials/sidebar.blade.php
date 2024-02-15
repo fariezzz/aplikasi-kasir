@@ -10,6 +10,13 @@
         </div>
         <ul class="sidebar-nav py-3">
             <li class="sidebar-item">
+                <a href="/" class="sidebar-link">
+                    <i class="bi bi-speedometer2"></i>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+
+            <li class="sidebar-item">
                 <a href="/profile" class="sidebar-link">
                     <i class="bi bi-person-circle"></i>
                     <span>Profile</span>

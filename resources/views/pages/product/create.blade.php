@@ -70,7 +70,7 @@
           <img class="img-preview img-fluid mb-3 col-lg-12">
         </div>
 
-        <div class="col-12 mb-3">
+        <div class="col-12 mb-5">
           <button type="submit" class="btn btn-primary">Add</button>
         </div>
 

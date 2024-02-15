@@ -13,6 +13,7 @@ use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\SearchOrderController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\ChangeStatusController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\UserController;
 
 /*
@@ -26,12 +27,7 @@ use App\Http\Controllers\UserController;
 |
 */
 
-Route::get('/', function () {
-    return view('pages.index', ['title' => 'Home'], [
-        'transactions' => Transaction::all(),
-        'products' => Product::all()
-    ]);
-})->middleware('auth');
+Route::get('/', [DashboardController::class, 'index'])->middleware('auth');
 
 Route::get('/login', [LoginController::class, 'login'])->name('login')->middleware('guest');
 Route::post('/login', [LoginController::class, 'authenticate']);
@@ -47,6 +43,7 @@ Route::post('/users/{user:id}', [UserController::class, 'destroy']);
 Route::get('/profile', [UserController::class, 'show']);
 Route::post('/update-user/{user:username}', [UserController::class, 'update']);
 
+Route::get('/search/product', [ProductController::class, 'search']);
 Route::resource('/product', ProductController::class);
 
 Route::resource('/category', CategoryController::class);

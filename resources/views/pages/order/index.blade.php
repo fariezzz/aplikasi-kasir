@@ -75,16 +75,18 @@
                     <form action="/order/{{ $order->id }}" method="POST">
                       @method('delete')
                       @csrf
-                      <button class="btn btn-danger mx-2" onclick="confirm('Are you sure to delete the order?')">
+                      <button class="btn btn-danger mx-2" id="deleteButton">
                         <i class="bi bi-trash3"></i> Delete
                       </button>
                     </form>
                     @else
-                    <a href="/transaction/pay-order/{{ $order->code }}" class="btn btn-primary">Pay</a>
+                    <a href="/transaction/pay-order/{{ $order->code }}" class="btn btn-primary">
+                      <i class="bi bi-credit-card-fill"></i> Pay
+                    </a>
                     <form action="/order/{{ $order->id }}" method="POST">
                       @method('put')
                       @csrf
-                      <button class="btn btn-danger mx-2" onclick="confirm('Are you sure to cancel the order?')">
+                      <button class="btn btn-danger mx-2" id="cancelButton">
                         <i class="bi bi-x-circle"></i> Cancel
                       </button>
                     </form>

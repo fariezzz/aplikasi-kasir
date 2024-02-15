@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\Supplier;
+use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Faker\Factory as FakerFactory;
@@ -118,12 +119,26 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        if($product->image){
+        if ($product->image) {
             Storage::delete($product->image);
         }
 
-        Product::destroy($product->id);
+        $product->delete();
+    
+        return back()->with('success', 'Item and related orders/transactions have been deleted.');
+    }
 
-        return back()->with('success', 'Item has been deleted.');
+    public function search(Request $request)
+    {
+        $searchTerm = $request->input('term');
+
+        $products = Product::where('name', 'like', '%' . $searchTerm . '%')->get();
+
+        $formattedProducts = [];
+        foreach ($products as $product) {
+            $formattedProducts[] = ['id' => $product->id, 'text' => $product->name];
+        }
+
+        return response()->json($formattedProducts);
     }
 }

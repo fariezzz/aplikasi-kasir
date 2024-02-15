@@ -8,14 +8,10 @@
   </div>
 
   <div class="col-lg-12 container-fluid">
-    <a href="/order" class="btn btn-primary mb-3"><i class="bi bi-arrow-left"></i> Back</a>
-    @if(session()->has('error'))
-    <div class="alert alert-danger alert-dismissible fade show col" role="alert">
-      {{ session('error') }}
-      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-    @endif
+    @include('partials.alertError')
 
+    <a href="/order" class="btn btn-primary mb-3"><i class="bi bi-arrow-left"></i> Back</a>
+    
     <table class="table table-bordered mb-3 text-center" style="border-color:rgb(194, 194, 194);">
       <thead>
         <tr>
@@ -80,7 +76,9 @@
               <input type="hidden" name="quantity[]" value="{{ json_decode($order->quantity)[$index] }}">
           @endforeach
           <input type="hidden" name="total_price" value="{{ $order->total_price }}">
-          <button type="submit" class="btn btn-primary">Store Transaction</button>
+          <button type="submit" class="btn btn-primary">
+            <i class="bi bi-credit-card-fill"></i> Pay
+          </button>
         </div>
       </div>
     </form>

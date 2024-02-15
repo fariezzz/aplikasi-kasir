@@ -43,6 +43,10 @@ class OrderController extends Controller
      */
     public function store(Request $request)
     {
+        if (empty($request->product_id)) {
+            return back()->with('error', 'Product ID cannot be empty. Pick at least one item.');
+        }
+    
         $validatedData = $request->validate([
             'customer_id' => 'required|exists:customers,id',
             'product_id' => 'required|array',

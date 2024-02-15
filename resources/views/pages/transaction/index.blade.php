@@ -78,7 +78,7 @@
                     <form action="/transaction/{{ $transaction->code }}" method="POST">
                       @method('delete')
                       @csrf
-                      <button class="btn btn-danger mx-2" onclick="return confirm('Are you sure to delete the transaction?')"><i class="bi bi-trash3"></i></button>
+                      <button class="btn btn-danger mx-2" id="deleteButton"><i class="bi bi-trash3"></i></button>
                     </form>
                   </td>
               </tr>

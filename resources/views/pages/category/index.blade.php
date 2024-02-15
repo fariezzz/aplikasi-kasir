@@ -30,11 +30,15 @@
                       <td>{{ $category->name }}</td>
                       <td>{{ $category->product->count() }}</td>
                       <td scope="col" class="d-flex justify-content-center">
-                        <a href="/category/{{ $category->slug }}/edit" class="btn btn-warning"><i class="bi bi-pencil-square"></i></a>
+                        <a href="/category/{{ $category->slug }}/edit" class="btn btn-warning">
+                          <i class="bi bi-pencil-square"></i> Edit
+                        </a>
                         <form action="/category/{{ $category->slug }}" method="POST">
                           @method('delete')
                           @csrf
-                          <button class="btn btn-danger mx-2" onclick="confirm('Are you sure to delete the item?')"><i class="bi bi-trash3"></i></button>
+                          <button class="btn btn-danger mx-2" id="deleteButton">
+                            <i class="bi bi-trash3"></i> Delete
+                          </button>
                         </form>
                       </td>
                   </tr>
