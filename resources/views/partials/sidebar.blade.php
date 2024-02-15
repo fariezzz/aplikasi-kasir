@@ -66,6 +66,22 @@
 
             <li class="sidebar-item">
                 <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
+                    data-bs-target="#suppliers" aria-expanded="false" aria-controls="suppliers">
+                    <i class="bi bi-truck"></i>
+                    <span>Suppliers</span>
+                </a>
+                <ul id="suppliers" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+                    <li class="sidebar-item">
+                        <a href="/category" class="sidebar-link">Supplier List</a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="/category/create" class="sidebar-link">Add Supplier</a>
+                    </li>
+                </ul>
+            </li>
+
+            <li class="sidebar-item">
+                <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
                     data-bs-target="#customers" aria-expanded="false" aria-controls="customers">
                     <i class="bi bi-people-fill"></i>
                     <span>Customers</span>

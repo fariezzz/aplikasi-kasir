@@ -34,14 +34,15 @@
       </div>
     </div>
 
-    <div class="col mb-3">
+    {{-- <div class="col mb-3">
       <a href="/transaction/create" class="btn btn-primary">
         <i class="bi bi-cart4"></i> Pay Orders
       </a>
-      <a href="/transaction/checkout-now" class="btn btn-primary ms-2">
-        <i class="bi bi-cart-check"></i> Checkout Now
-      </a>    
-    </div>
+    </div> --}}
+
+    <a href="/transaction/checkout-now" class="btn btn-primary mb-3">
+      <i class="bi bi-cart-check"></i> Checkout Now
+    </a> 
 
     @if($transactions->count())
     <table class="table table-bordered text-center" style="border-color:rgb(194, 194, 194);">

@@ -56,7 +56,7 @@
                             </div>
 
                             <div class="d-flex justify-content-center col-lg-12 mb-3 w-100">
-                                <button type="button" class="btn btn-primary mx-2"><i class="bi bi-eye"></i> Details</button>
+                                <button type="button" class="btn btn-primary mx-2 btn-detail" data-code="{{ $product->code }}" data-name="{{ $product->name }}" data-category="{{ $product->category->name }}" data-supplier="{{ $product->supplier->name }}" data-description="{{ $product->description }}" data-stock="{{ $product->stock }}" data-price="{{ $product->price }}"><i class="bi bi-eye"></i> Details</button>
 
                                 <a href="/product/{{ $product->code }}/edit">
                                     <button type="button" class="btn btn-warning mx-2"><i class="bi bi-pencil-square"></i> Edit</button>
@@ -77,5 +77,55 @@
             @endif
         </div>
     </div>
+    
+    <div class="modal fade" id="detailsModal" tabindex="-1" aria-labelledby="detailsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="detailsModalLabel">Book Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong>Name:</strong> <span id="detailName"></span></p>
+                            <p><strong>Code:</strong> <span id="detailCode"></span></p>
+                            <p><strong>Category:</strong> <span id="detailCategory"></span></p>
+                            <p><strong>Supplier:</strong> <span id="detailSupplier"></span></p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Description:</strong> <span id="detailDescription"></span></p>
+                            <p><strong>Stock:</strong> <span id="detailStock"></span></p>
+                            <p><strong>Price:</strong> <span id="detailPrice"></span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  
+  <script>
+    $(document).ready(function() {
+      $('.btn-detail').click(function() {
+        let name = $(this).data('name');
+        let code = $(this).data('code');
+        let category = $(this).data('category');
+        let supplier = $(this).data('supplier');
+        let description = $(this).data('description');
+        let stock = $(this).data('stock');
+        let price = $(this).data('price');
+  
+        $('#detailName').text(name);
+        $('#detailCode').text(code);
+        $('#detailCategory').text(category);
+        $('#detailSupplier').text(supplier);
+        $('#detailDescription').text(description);
+        $('#detailStock').text(stock);
+        $('#detailPrice').text(price);
+  
+        $('#detailsModal').modal('show');
+      });
+    });
+  </script>
 
-@endsection
+  @endsection

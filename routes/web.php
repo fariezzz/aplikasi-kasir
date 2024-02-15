@@ -57,6 +57,7 @@ Route::resource('/order', OrderController::class);
 
 Route::get('/transaction/checkout-now', [TransactionController::class, 'checkoutNow']);
 Route::get('/transaction/pay-order/{order:code}', [TransactionController::class, 'payOrder']);
+Route::post('/transaction/pay/{order:code}', [TransactionController::class, 'store']);
 Route::resource('/transaction', TransactionController::class);
 Route::post('/transaction/pay-now', [TransactionController::class, 'payNow']);
 Route::get('/transaction/invoice/{code}', [TransactionController::class, 'template'])->name('invoice.print');

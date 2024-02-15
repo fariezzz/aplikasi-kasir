@@ -36,7 +36,7 @@
     </div>
 
     <div class="col">
-      <a href="/users/create" class="btn btn-primary mb-3">Add User</a>
+      <a href="/users/create" class="btn btn-primary mb-3"><i class="bi bi-plus-circle"></i> Add User</a>
       {{ $users->links() }}
     </div>
 

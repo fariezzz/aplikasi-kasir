@@ -6,6 +6,13 @@
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 mt-2 pb-2 mb-3 border-bottom">
       <h3>Edit Item</h3>
     </div>
+
+    @if(session()->has('error'))
+      <div class="alert alert-danger alert-dismissible fade show col" role="alert">
+      {!! session('error') !!}
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    @endif
     
     <div class="col">
 

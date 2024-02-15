@@ -8,6 +8,7 @@
     </div>
     
     <div class="col-lg-12 container-fluid">
+      <a href="/order" class="btn btn-primary mb-3"><i class="bi bi-arrow-left"></i> Back</a>
       <form class="row g-3" method="POST" action="/order">
         @csrf
         <div class="col-lg-6">
@@ -28,7 +29,9 @@
             <label for="product_id" class="form-label">Product</label>
               <select class="form-select" name="product_id" id="product_id">
                 @foreach($products as $product)
-                  <option value="{{ $product->id }}" data-name="{{ $product->name }}" data-price="{{ $product->price }}" data-id="{{ $product->id }}">{{ $product->name }} (Rp. {{ number_format($product->price) }})</option>
+                  @if($product->stock > 0)
+                    <option value="{{ $product->id }}" data-name="{{ $product->name }}" data-price="{{ $product->price }}" data-id="{{ $product->id }}" data-stock="{{ $product->stock }}">{{ $product->name }} (Rp. {{ number_format($product->price) }})</option>
+                  @endif
                 @endforeach
               </select>
           </div>
@@ -96,69 +99,111 @@
 }
 
   function addItem() {
+    let selectedProductId = $('#product_id').val();
+    let selectedProduct = items.find(item => item.product_id == selectedProductId);
+
+    if (selectedProduct) {
+      let stock = parseInt($('#product_id').find(':selected').data('stock'));
+      if (selectedProduct.quantity >= stock) {
+          alert('Quantity cannot exceed available stock!');
+          return;
+      }
+    }
+
     updateTotalPrice(parseInt($('#product_id').find(':selected').data('price')))
     let item = items.filter(el => el.product_id === $('#product_id').find(':selected').data('id'));
+    let stock = parseInt($('#product_id').find(':selected').data('stock'));
     if (item.length > 0) {
-        item[0].quantity += 1
+      item[0].quantity += 1;
     } else {
         let item = {
-            product_id: $('#product_id').find(':selected').data('id'),
-            name: $('#product_id').find(':selected').data('name'),
-            price: $('#product_id').find(':selected').data('price'),
-            quantity: 1
+          product_id: $('#product_id').find(':selected').data('id'),
+          name: $('#product_id').find(':selected').data('name'),
+          price: $('#product_id').find(':selected').data('price'),
+          quantity: 1
         }
         items.push(item)
     }
-    updateQuantity(1)
+    updateTotalQuantity(1)
     updateTable()
+    calculateChange()
   }
 
   function deleteItem(index) {
-      let item = items[index]
-      if (item.quantity > 1) {
-          items[index].quantity -= 1;
-          updateTotalPrice(-(item.price))
-          updateQuantity(-1)
-      } else {
-          items.splice(index, 1)
-          updateTotalPrice(-(item.price * item.quantity))
-          updateQuantity(-(item.quantity))
-      }
-      updateTable()
+      let item = items[index];
+      items.splice(index, 1);
+      updateTotalPrice(-(item.price * item.quantity));
+      updateTotalQuantity(-(item.quantity));
+      updateTable();
   }
 
   function updateTable() {
-      let html = ''
-      items.map((el, index) => {
-          let price = formatRupiah(el.price.toString())
-          let quantity = formatRupiah(el.quantity.toString())
-          html += `
-          <tr>
-              <td>${index + 1}</td>
-              <td>${el.name}</td>
-              <td>${quantity}</td>
-              <td>${price}</td>
-              <td>
-                  <input type="hidden" name="product_id[]" value="${el.product_id}">
-                  <input type="hidden" name="quantity[]" value="${el.quantity}">
-                  <button type="button" onclick="deleteItem(${index})" class="btn btn-danger"><i class="bi bi-trash"></i></button>
-              </td>
-          </tr>
-          `
-      })
-      $('.totalPrice')
-      $('.items').html(html)
+    let html = '';
+    items.map((el, index) => {
+        let price = formatRupiah(el.price.toString());
+        let quantity = formatRupiah(el.quantity.toString());
+        html += `
+        <tr>
+            <td>${index + 1}</td>
+            <td>${el.name}</td>
+            <td>
+                <span id="quantity_${index}" class="editable-quantity" contenteditable="true" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+                  ${el.quantity}
+                </span>
+            </td>
+            <td>${price}</td>
+            <td>
+                <input type="hidden" name="product_id[]" value="${el.product_id}">
+                <input type="hidden" name="quantity[]" value="${el.quantity}">
+                <button type="button" onclick="deleteItem(${index})" class="btn btn-danger"><i class="bi bi-trash"></i></button>
+            </td>
+        </tr>
+        `;
+    });
+    $('.totalPrice').html(formatRupiah(totalPrice.toString()));
+    $('.items').html(html);
+
+    $('.editable-quantity').keydown(function(event) {
+      let newValue = $(this).text().trim();
+      let index = $(this).closest('tr').index();
+
+      if (event.keyCode !== 13) {
+          return;
+      }
+
+      if(newValue !== '') {
+          updateQuantity(index, newValue);
+      }
+    });
+  }
+
+  function updateQuantity(index, newValue) {
+    let item = items[index];
+    let oldValue = item.quantity;
+    let stock = parseInt($('#product_id').find(':selected').data('stock'));
+    let diff = parseInt(newValue) - oldValue;
+
+    if (parseInt(newValue) > stock) {
+        newValue = stock;
+        diff = newValue - oldValue;
+    }
+
+    items[index].quantity = parseInt(newValue);
+    updateTotalQuantity(diff);
+    updateTotalPrice(diff * item.price);
+    updateTable();
+    calculateChange();
   }
 
   function updateTotalPrice(nom) {
-      totalPrice = totalPrice + nom;
-      $('[name=total_price]').val(totalPrice)
-      $('.totalPrice').html(formatRupiah(totalPrice.toString()))
+    totalPrice += nom;
+    $('[name=total_price]').val(totalPrice);
+    $('.totalPrice').html(formatRupiah(totalPrice.toString()));
   }
 
-  function updateQuantity(nom) {
-      quantity = quantity + nom;
-      $('.quantity').html(formatRupiah(quantity.toString()))
+  function updateTotalQuantity(nom) {
+    quantity += nom;
+    $('.quantity').html(formatRupiah(quantity.toString()));
   }
 
   function emptyTable() {
@@ -167,7 +212,8 @@
   }
 
   $(document).ready(function() {
-      emptyTable()
+      emptyTable();
+      updateTotalQuantity(0);
   })
 
 </script>

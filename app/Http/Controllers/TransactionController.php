@@ -40,59 +40,63 @@ class TransactionController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function payOrder(Order $order)
     {
-        $selectedOrders = session('selected_orders', collect());
-        $unselectedOrders = Order::all()->diff($selectedOrders);
+        // $selectedOrders = session('selected_orders', collect());
+        // $unselectedOrders = Order::all()->diff($selectedOrders);
         return view('pages.transaction.create', [
-            'title' => 'Add Transaction',
+            'title' => 'Pay Order',
+            'order' => $order,
             'customers' => Customer::all(),
-            'orders' => Order::all(),
             'products' => Product::all(),
-            'selectedOrders' => $selectedOrders,
-            'unselectedOrders' => $unselectedOrders
+            // 'selectedOrders' => $selectedOrders,
+            // 'unselectedOrders' => $unselectedOrders
         ]);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Order $order, Request $request)
     {
-        $selectedOrders = session('selected_orders', collect());
-
-        if ($selectedOrders->isEmpty()) {
-            return back()->with('error', 'Please select at least one order.');
+        if($request->amount_paid < $request->total_price){
+            return back()->with('error', 'Insufficient funds.');
         }
+        
+        $validatedData = $request->validate([
+            'customer_id' => 'required|exists:customers,id',
+            'product_id' => 'required|array',
+            'product_id.*' => 'exists:products,id',
+            'quantity' => 'required|array',
+            'quantity.*' => 'integer|min:1',
+            'total_price' => 'required|numeric|min:0',
+        ]);
 
-        if ($selectedOrders->pluck('customer_id')->unique()->count() !== 1) {
-            return back()->with('error', 'Please ensure that all selected orders have the same customer.');
-        }
-
-        $transaction = new Transaction();
-        $transaction->user_id = auth()->user()->id;
-        $transaction->customer_id = $selectedOrders->first()->customer_id;
+        $validatedData['product_id'] = json_encode($request->product_id);
+        $validatedData['quantity'] = json_encode($request->quantity);
+    
+        $validatedData['user_id'] = auth()->user()->id; 
+        $validatedData['date'] = now();
 
         $uniqueCode = FakerFactory::create()->unique()->numerify('#-##');
         while (Transaction::where('code', $uniqueCode)->exists()) {
             $uniqueCode = FakerFactory::create()->unique()->numerify('#-##');
         }
-        $transaction->code = $uniqueCode;
+        $validatedData['code'] = $uniqueCode;
 
-        $transaction->date = now();
-        $transaction->total_price = $selectedOrders->sum('total_price');
+        $transaction = Transaction::create($validatedData);
 
-        $transaction->save();
-
-        foreach ($selectedOrders as $order) {
-            $order->transaction_id = $transaction->id;
-            $order->status = 'Done';
-            $order->save();
+        foreach ($request->product_id as $index => $product_id) {
+            $product = Product::find($product_id);
+            $product->stock -= $request->quantity[$index];
+            $product->save();
         }
 
-        $request->session()->forget('selected_orders');
-
-        return redirect('/transaction')->with('success', 'Data has been added. Print <a href="' . route('invoice.print', $transaction->code) . '" class="text-decoration-underline">here.</a>');
+        $order->transaction_id = $transaction->id;
+        $order->status = 'Done';
+        $order->save();
+    
+        return redirect('/order')->with('success', 'Transaction has been saved. Print <a href="' . route('invoice.print', $validatedData['code']) . '" class="text-decoration-underline">here.</a>');
     }
 
     /**
@@ -133,32 +137,6 @@ class TransactionController extends Controller
         return back()->with('success', 'Data has been deleted');
     }
 
-    public function addToSelectedOrder(Request $request, Order $order){
-        if (!$request->session()->has('selected_orders')) {
-            $request->session()->put('selected_orders', collect());
-        }
-
-        $selectedOrders = $request->session()->get('selected_orders');
-        $selectedOrders->push($order);
-        $request->session()->put('selected_orders', $selectedOrders);
-
-        return back();
-    }
-
-    public function removeFromSelectedOrder(Request $request, Order $order){
-        if ($request->session()->has('selected_orders')) {
-            $selectedOrders = $request->session()->get('selected_orders');
-
-            $selectedOrders = $selectedOrders->reject(function ($item) use ($order) {
-                return $item->id === $order->id;
-            });
-
-            $request->session()->put('selected_orders', $selectedOrders);
-        }
-
-        return back();
-    }
-
     public function template($code){
         $transaction = Transaction::where('code', $code)->first();
 
@@ -178,6 +156,10 @@ class TransactionController extends Controller
     }
 
     public function payNow(Request $request){
+        if($request->amount_paid < $request->total_price){
+            return back()->with('error', 'Insufficient funds.');
+        }
+
         $validatedData = $request->validate([
             'customer_id' => 'required|exists:customers,id',
             'product_id' => 'required|array',
@@ -187,12 +169,10 @@ class TransactionController extends Controller
             'total_price' => 'required|numeric|min:0',
         ]);
 
-        $validatedData['product_id'] = json_encode($request->product_id);
-        $validatedData['quantity'] = json_encode($request->quantity);
+        $validatedData['product_id'] = json_encode($validatedData['product_id']);
+        $validatedData['quantity'] = json_encode($validatedData['quantity']);
     
         $validatedData['user_id'] = auth()->user()->id; 
-        $validatedData['customer_id'] = $request->customer_id;
-        $validatedData['total_price'] = $request->total_price;
         $validatedData['date'] = now();
 
         $uniqueCode = FakerFactory::create()->unique()->numerify('#-##');
@@ -209,6 +189,6 @@ class TransactionController extends Controller
             $product->save();
         }
     
-        return redirect('/transaction')->with('success', 'Transaction has been saved. Print <a href="' . route('invoice.print', $validatedData['code']) . '" class="text-decoration-underline">here</a>');
+        return redirect('/transaction')->with('success', 'Transaction has been saved. Print <a href="' . route('invoice.print', $validatedData['code']) . '" class="text-decoration-underline">here.</a>');
     }
 }

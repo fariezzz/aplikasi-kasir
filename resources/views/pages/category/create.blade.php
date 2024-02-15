@@ -8,6 +8,7 @@
     </div>
     
     <div class="col-lg-12 container-fluid">
+      <a href="/category" class="btn btn-primary mb-3"><i class="bi bi-arrow-left"></i> Back</a>
       <form method="POST" action="/category">
         @csrf
         <div class="row mb-3">

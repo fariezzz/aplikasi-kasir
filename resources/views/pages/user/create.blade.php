@@ -6,8 +6,9 @@
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 mt-2 pb-2 mb-3 border-bottom">
       <h3>Add User</h3>
     </div>
-    
+
     <div class="col-lg-12 container-fluid">
+      <a href="/users" class="btn btn-primary mb-3"><i class="bi bi-arrow-left"></i> Back</a>
       <form class="row g-3" method="POST" action="/users">
         @csrf
         <div class="col-lg-6">

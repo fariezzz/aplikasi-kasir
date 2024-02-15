@@ -80,6 +80,7 @@
                       </button>
                     </form>
                     @else
+                    <a href="/transaction/pay-order/{{ $order->code }}" class="btn btn-primary">Pay</a>
                     <form action="/order/{{ $order->id }}" method="POST">
                       @method('put')
                       @csrf

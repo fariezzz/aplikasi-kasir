@@ -94,9 +94,19 @@ a.sidebar-link:hover {
     position: relative;
 }
 
+.modal-body {
+    max-height: 400px;
+}
+
 .form-control, .form-select {
     border-radius: 8px;
     border-color:rgb(100, 100, 100);
+}
+
+.editable-quantity {
+    border: none;
+    outline: none;
+    cursor: text;
 }
 
 /* .pagination .page-link {

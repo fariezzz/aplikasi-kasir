@@ -8,6 +8,7 @@
     </div>
     
     <div class="col-lg-12 container-fluid">
+      <a href="/product" class="btn btn-primary mb-3"><i class="bi bi-arrow-left"></i> Back</a>
       <form class="row g-3" method="POST" action="/product" enctype="multipart/form-data">
         @csrf
         <div class="col-lg-6">
