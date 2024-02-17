@@ -12,7 +12,10 @@ class SupplierController extends Controller
      */
     public function index()
     {
-        //
+        return view('pages.supplier.index', [
+            'title' => 'Supplier List',
+            'suppliers' => Supplier::paginate()
+        ]);
     }
 
     /**
@@ -20,7 +23,9 @@ class SupplierController extends Controller
      */
     public function create()
     {
-        //
+        return view('.pages.supplier.create', [
+            'title' => 'Add Supplier'
+        ]);
     }
 
     /**
@@ -28,7 +33,17 @@ class SupplierController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validatedData = $request->validate([
+            'name' => 'required|max:255',
+            'email' => 'required|email:dns|unique:suppliers',
+            'contact' => 'required',
+            'address' => 'required|max:255',
+            'description' => 'nullable|max:255',
+        ]);
+
+        Supplier::create($validatedData);
+
+        return redirect('/suppliers')->with('success' ,'New supplier has been added.');
     }
 
     /**
@@ -44,7 +59,10 @@ class SupplierController extends Controller
      */
     public function edit(Supplier $supplier)
     {
-        //
+        return view('pages.supplier.edit', [
+            'title' => 'Edit Supplier',
+            'supplier' => $supplier
+        ]);
     }
 
     /**
@@ -52,7 +70,22 @@ class SupplierController extends Controller
      */
     public function update(Request $request, Supplier $supplier)
     {
-        //
+        $rules = [
+            'name' => 'required|max:255',
+            'contact' => 'required',
+            'address' => 'required|max:255',
+            'description' => 'nullable|max:255',
+        ];
+
+        if($request->email != $supplier->email){
+            $rules['email'] = 'required|email:dns|unique:suppliers';
+        }
+
+        $validatedData = $request->validate($rules);
+
+        Supplier::where('id', $supplier->id)->update($validatedData);
+
+        return redirect('/suppliers')->with('success' ,'Supplier has been updated.');
     }
 
     /**
@@ -60,6 +93,14 @@ class SupplierController extends Controller
      */
     public function destroy(Supplier $supplier)
     {
-        //
+        $products = $supplier->products()->get();
+
+        foreach ($products as $product) {
+            $product->delete();
+        }
+
+        $supplier->delete();
+
+        return back()->with('success', 'Supplier has been deleted.');
     }
 }

@@ -46,7 +46,7 @@ class ProductController extends Controller
             'category_id' => 'required',
             'supplier_id' => 'required',
             'description' => 'max:255|nullable',
-            'stock' => 'integer|min:1',
+            'stock' => 'integer|min:0',
             'price' => 'required',
             'image' => 'image|file|max:1024'
         ]);
@@ -97,7 +97,7 @@ class ProductController extends Controller
             'category_id' => 'required',
             'supplier_id' => 'required',
             'description' => 'max:255|nullable',
-            'stock' => 'integer|min:1',
+            'stock' => 'integer|min:0',
             'price' => 'required',
             'image' => 'image|file|max:1024'
         ]);
@@ -126,19 +126,5 @@ class ProductController extends Controller
         $product->delete();
     
         return back()->with('success', 'Item and related orders/transactions have been deleted.');
-    }
-
-    public function search(Request $request)
-    {
-        $searchTerm = $request->input('term');
-
-        $products = Product::where('name', 'like', '%' . $searchTerm . '%')->get();
-
-        $formattedProducts = [];
-        foreach ($products as $product) {
-            $formattedProducts[] = ['id' => $product->id, 'text' => $product->name];
-        }
-
-        return response()->json($formattedProducts);
     }
 }

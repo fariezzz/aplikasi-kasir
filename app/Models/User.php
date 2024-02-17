@@ -46,12 +46,10 @@ class User extends Authenticatable
     }
 
     public function scopeFilter($query, array $filters){
-        $query->when($filters['search'] ?? false, function($query, $search){
-            $query->where(function($query) use($search){
-                $query->where('name', 'like', '%' . $search . '%');
+        $query->when($filters['role'] ?? false, function($query, $role){
+            $query->where(function($query) use($role){
+                $query->where('role', $role);
             });
-        })->when($filters['role'] ?? false, function($query, $status){
-            $query->where('role', $status);
         });
     }
 }

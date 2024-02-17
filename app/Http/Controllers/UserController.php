@@ -13,7 +13,7 @@ class UserController extends Controller
     public function index(){
         return view('pages.user.index', [
             'title' => 'User List',
-            'users' => User::latest()->filter(request(['search', 'role']))->paginate(5)->withQueryString()
+            'users' => User::latest()->filter(request(['role']))->get()
         ]);
     }
 
@@ -76,7 +76,7 @@ class UserController extends Controller
 
         $user->update($validatedData);
 
-        return back()->with('success', 'Data updated');
+        return back()->with('success', 'Data updated.');
     }
 
     public function destroy(User $user){

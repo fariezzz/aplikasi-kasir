@@ -3,7 +3,7 @@
 @section('container')
 <div class="mx-3 container-fluid">
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 mt-2 pb-2 mb-3">
-        <h3>Welcome, {{ auth()->user()->name }}</h3>
+        <h3>Welcome, {{ auth()->user()->name }}!</h3>
     </div>
 
   <div class="row">
@@ -35,7 +35,7 @@
     </div>
   </div>
 
-  <div class="row">
+  <div class="row mb-5">
     <div class="col-md-12">
         <canvas class="my-4 w-100" id="myChart" width="900" height="380"></canvas>
     </div>

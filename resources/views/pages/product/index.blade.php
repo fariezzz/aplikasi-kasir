@@ -10,62 +10,58 @@
     @include('partials.alert')
 
     <div class="container-fluid">
-        <div class="row justify-content-end">
-            <div class="col-lg-8">
-                <form action="/product" method="GET" class="row g-3">
-                    <div class="col-lg-5">
-                        <div>
-                            <select class="form-select" name="category" id="category">
-                                <option value="" selected>All Categories</option>
-                                @foreach($categories as $category)
-                                    <option value="{{ $category->slug }}" {{ request('category') == $category->slug ? 'selected' : '' }}>{{ $category->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
+        <div class="row justify-content-between">
+            <div class="col-lg-6">
+                <a href="/product/create" class="btn btn-primary mb-3">
+                    <i class="bi bi-plus-circle"></i> Add Item
+                </a>
+            </div>
+            <div class="col-lg-6">
+                <form action="/product" method="GET" class="row">
+                    <div class="col-lg-6">
+                        <select class="form-select" name="category" id="category">
+                            <option value="" selected>All Categories</option>
+                            @foreach($categories as $category)
+                                <option value="{{ $category->slug }}" {{ request('category') == $category->slug ? 'selected' : '' }}>{{ $category->name }}</option>
+                            @endforeach
+                        </select>
                     </div>
-
-                    <div class="col-lg-5">
+        
+                    <div class="col-lg-6">
                         <div class="input-group">
-                            <input type="text" class="form-control" style="border-color:rgb(0, 0, 0);" placeholder="Search name..." name="search" value="{{ request('search') }}">
+                            <input type="text" id="search" class="form-control" style="border-color:rgb(0, 0, 0);" placeholder="Search name..." name="search" value="{{ request('search') }}">
                         </div>
-                    </div>
-
-                    <div class="col-lg-2 d-flex justify-content-between align-self-center">
-                        <button class="btn btn-primary" type="submit">Search</button>
                     </div>
                 </form>
             </div>
         </div>
 
-        <div class="col">
-            <a href="/product/create" class="btn btn-primary mb-3"><i class="bi bi-plus-circle"></i> Add Item</a>
-            {{ $products->links() }}
-        </div>
+        {{ $products->links() }}
         
-        <div class="row">
+        <div class="row" id="productList">
             @if($products->count())
                 @foreach ($products as $product)
-                    <div class="col-md-4 mb-3">
+                    <div class="col-md-4 mb-3" data-category="{{ $product->category->slug }}">
                         <div class="card" style="height: 100%; width: auto">
                             <img src="{{ asset('storage/' . $product->image) }}" class="card-img-top h-75" alt="">
 
                             <div class="card-body d-flex flex-column align-items-center">
                                 <h5 class="card-title text-center">{{ $product->name }}</h5>
-                                <small>Price: Rp. {{ $product->price }}</small>
+                                <small>Price: Rp. {{ number_format($product->price) }}</small>
                                 <small>Stock: {{ $product->stock }}</small>
                             </div>
 
                             <div class="d-flex justify-content-center col-lg-12 mb-3 w-100">
-                                <button type="button" class="btn btn-primary mx-2 btn-detail" data-code="{{ $product->code }}" data-name="{{ $product->name }}" data-category="{{ $product->category->name }}" data-supplier="{{ $product->supplier->name }}" data-description="{{ $product->description }}" data-stock="{{ $product->stock }}" data-price="{{ $product->price }}"><i class="bi bi-eye"></i> Details</button>
+                                <button type="button" class="btn btn-primary mx-2 btn-detail" data-code="{{ $product->code }}" data-name="{{ $product->name }}" data-category="{{ $product->category->name }}" data-supplier="{{ $product->supplier->name }}" data-description="{{ $product->description }}" data-stock="{{ $product->stock }}" data-price="{{ $product->price }}"><i class="bi bi-eye"></i></button>
 
                                 <a href="/product/{{ $product->code }}/edit">
-                                    <button type="button" class="btn btn-warning mx-2"><i class="bi bi-pencil-square"></i> Edit</button>
+                                    <button type="button" class="btn btn-warning mx-2"><i class="bi bi-pencil-square"></i></button>
                                 </a>
 
                                 <form action="/product/{{ $product->code }}" method="POST" class="d-inline">
                                     @method('delete')
                                     @csrf
-                                    <button class="btn btn-danger mx-2" id="deleteButton"><i class="bi bi-trash3"></i> Delete</button>
+                                    <button class="btn btn-danger mx-2" id="deleteButton"><i class="bi bi-trash3"></i></button>
                                 </form>
                             </div>
 
@@ -106,6 +102,14 @@
   
   <script>
     $(document).ready(function() {
+        $('#category').change(function() {
+            filterProducts();
+        });
+
+        $('#search').on('input', function() {
+            filterProducts();
+        });
+
       $('.btn-detail').click(function() {
         let name = $(this).data('name');
         let code = $(this).data('code');
@@ -125,6 +129,22 @@
   
         $('#detailsModal').modal('show');
       });
+
+      function filterProducts() {
+        let category = $('#category').val().toLowerCase();
+        let searchText = $('#search').val().toLowerCase();
+
+        $('#productList .col-md-4').each(function() {
+            let productCategory = $(this).data('category').toLowerCase();
+            let productName = $(this).find('.card-title').text().toLowerCase();
+
+            if ((category === '' || productCategory === category) && (searchText === '' || productName.includes(searchText))) {
+                $(this).show();
+            } else {
+                $(this).hide();
+            }
+        });
+    }
     });
   </script>
 

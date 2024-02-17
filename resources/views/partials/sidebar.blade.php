@@ -23,100 +23,53 @@
                 </a>
             </li>
 
+            @can('admin')
             <li class="sidebar-item">
-                <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
-                    data-bs-target="#users" aria-expanded="false" aria-controls="users">
+                <a href="/users" class="sidebar-link">
                     <i class="bi bi-person-vcard"></i>
                     <span>Users</span>
                 </a>
-                <ul id="users" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
-                    <li class="sidebar-item">
-                        <a href="/users" class="sidebar-link">User List</a>
-                    </li>
-                    <li class="sidebar-item">
-                        <a href="/users/create" class="sidebar-link">Add User</a>
-                    </li>
-                </ul>
             </li>
+            @endcan
 
             <li class="sidebar-item">
-                <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
-                    data-bs-target="#products" aria-expanded="false" aria-controls="products">
+                <a href="/product" class="sidebar-link">
                     <i class="bi bi-box-fill"></i>
                     <span>Products</span>
                 </a>
-                <ul id="products" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
-                    <li class="sidebar-item">
-                        <a href="/product" class="sidebar-link">Item List</a>
-                    </li>
-                    <li class="sidebar-item">
-                        <a href="/product/create" class="sidebar-link">Add Item</a>
-                    </li>
-                </ul>
             </li>
+            
 
+            @can('admin')
             <li class="sidebar-item">
-                <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
-                    data-bs-target="#_category" aria-expanded="false" aria-controls="_category">
+                <a href="/category" class="sidebar-link">
                     <i class="bi bi-tags-fill"></i>
                     <span>Categories</span>
                 </a>
-                <ul id="_category" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
-                    <li class="sidebar-item">
-                        <a href="/category" class="sidebar-link">Category List</a>
-                    </li>
-                    <li class="sidebar-item">
-                        <a href="/category/create" class="sidebar-link">Add Category</a>
-                    </li>
-                </ul>
             </li>
+            @endcan
 
+            @can('admin')
             <li class="sidebar-item">
-                <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
-                    data-bs-target="#suppliers" aria-expanded="false" aria-controls="suppliers">
+                <a href="/suppliers" class="sidebar-link">
                     <i class="bi bi-truck"></i>
                     <span>Suppliers</span>
                 </a>
-                <ul id="suppliers" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
-                    <li class="sidebar-item">
-                        <a href="/category" class="sidebar-link">Supplier List</a>
-                    </li>
-                    <li class="sidebar-item">
-                        <a href="/category/create" class="sidebar-link">Add Supplier</a>
-                    </li>
-                </ul>
             </li>
+            @endcan
 
             <li class="sidebar-item">
-                <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
-                    data-bs-target="#customers" aria-expanded="false" aria-controls="customers">
+                <a href="/customer" class="sidebar-link">
                     <i class="bi bi-people-fill"></i>
                     <span>Customers</span>
                 </a>
-                <ul id="customers" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
-                    <li class="sidebar-item">
-                        <a href="/customer" class="sidebar-link">Customer List</a>
-                    </li>
-                    <li class="sidebar-item">
-                        <a href="/customer/create" class="sidebar-link">Add Customer</a>
-                    </li>
-                </ul>
             </li>
 
             <li class="sidebar-item">
-                <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
-                    data-bs-target="#orders" aria-expanded="false" aria-controls="orders">
+                <a href="/order" class="sidebar-link">
                     <i class="bi bi-receipt"></i>
                     <span>Orders</span>
                 </a>
-                <ul id="orders" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
-                    <li class="sidebar-item">
-                        <a href="/order" class="sidebar-link">Order List</a>
-                    </li>
-                    <li class="sidebar-item">
-                        <a href="/order/create" class="sidebar-link">Add Order</a>
-                    </li>
-                </ul>
             </li>
 
             <li class="sidebar-item">

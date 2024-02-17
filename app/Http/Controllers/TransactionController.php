@@ -42,15 +42,11 @@ class TransactionController extends Controller
      */
     public function payOrder(Order $order)
     {
-        // $selectedOrders = session('selected_orders', collect());
-        // $unselectedOrders = Order::all()->diff($selectedOrders);
         return view('pages.transaction.create', [
             'title' => 'Pay Order',
             'order' => $order,
             'customers' => Customer::all(),
             'products' => Product::all(),
-            // 'selectedOrders' => $selectedOrders,
-            // 'unselectedOrders' => $unselectedOrders
         ]);
     }
 
@@ -143,7 +139,7 @@ class TransactionController extends Controller
 
     public function checkoutNow(){
         return view('pages.transaction.checkout_now', [
-            'title' => 'Pay Now',
+            'title' => 'Checkout Now',
             'customers' => Customer::all(),
             'products' => Product::all(),
         ]);

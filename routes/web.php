@@ -14,6 +14,7 @@ use App\Http\Controllers\SearchOrderController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\ChangeStatusController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\UserController;
 
 /*
@@ -36,17 +37,21 @@ Route::post('/logout', [LoginController::class, 'logout']);
 Route::get('/register', [RegisterController::class, 'register'])->middleware('guest');
 Route::post('/register', [RegisterController::class, 'store']);
 
-Route::get('/users', [UserController::class, 'index']);
-Route::get('/users/create', [UserController::class, 'create']);
-Route::post('/users', [UserController::class, 'store']);
-Route::post('/users/{user:id}', [UserController::class, 'destroy']);
+Route::middleware(['admin'])->group(function () {
+    Route::get('/users', [UserController::class, 'index']);
+    Route::get('/users/create', [UserController::class, 'create']);
+    Route::post('/users', [UserController::class, 'store']);
+    Route::get('/users/{user:id}', [UserController::class, 'destroy'])->name('users.delete');
+
+    Route::resource('/category', CategoryController::class);
+
+    Route::resource('/suppliers', SupplierController::class);
+});
+
 Route::get('/profile', [UserController::class, 'show']);
 Route::post('/update-user/{user:username}', [UserController::class, 'update']);
 
-Route::get('/search/product', [ProductController::class, 'search']);
 Route::resource('/product', ProductController::class);
-
-Route::resource('/category', CategoryController::class);
 
 Route::resource('/customer', CustomerController::class);
 
@@ -58,5 +63,3 @@ Route::post('/transaction/pay/{order:code}', [TransactionController::class, 'sto
 Route::resource('/transaction', TransactionController::class);
 Route::post('/transaction/pay-now', [TransactionController::class, 'payNow']);
 Route::get('/transaction/invoice/{code}', [TransactionController::class, 'template'])->name('invoice.print');
-Route::post('/add-to-selected-order/{order}', [TransactionController::class, 'addToSelectedOrder'])->name('add.selected.order');
-Route::post('/remove-from-selected-order/{order}', [TransactionController::class, 'removeFromSelectedOrder'])->name('remove.selected.order');

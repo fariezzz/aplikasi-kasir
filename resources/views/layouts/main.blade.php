@@ -8,9 +8,11 @@
         <link href="{{ asset('/bootstrap/vendor/twbs/bootstrap/dist/css/bootstrap.min.css') }}" rel="stylesheet">
         <link href="{{ asset('/bootstrap-icons/vendor/twbs/bootstrap-icons/font/bootstrap-icons.css') }}" rel="stylesheet">
         <link rel="stylesheet" href="{{ asset('css/style.css') }}">
-        <script src="{{ asset('/jquery/node_modules/jquery/dist/jquery.min.js') }}"></script>
         <link href="{{ asset('/select2/dist/css/select2.min.css') }}" rel="stylesheet" />
-        <script src="{{ asset('/select2/dist/js/select2.min.js') }}"></script>
+        <script src="{{ asset('/jquery/node_modules/jquery/dist/jquery.min.js') }}"></script>
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css">
+        <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+        <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
     </head>
 
     <body>
@@ -22,13 +24,14 @@
         </div>
             </div>
 
+        <script src="{{ asset('/select2/dist/js/select2.min.js') }}"></script>
         <script>
             let totalPrice = 0;
             let quantity = 0;
             let items = [];
 
             function formatRupiah(angka, prefix) {
-                var number_string = angka.toString(),
+                let number_string = angka.toString(),
                     split = number_string.split(','),
                     sisa = split[0].length % 3,
                     rupiah = split[0].substr(0, sisa),
@@ -65,7 +68,8 @@
                     product_id: $('#product_id').find(':selected').data('id'),
                     name: $('#product_id').find(':selected').data('name'),
                     price: $('#product_id').find(':selected').data('price'),
-                    quantity: 1
+                    quantity: 1,
+                    stock: parseInt($('#product_id').find(':selected').data('stock')),
                     }
                     items.push(item)
                 }
@@ -109,11 +113,11 @@
                 $('.items').html(html);
 
                 $('.editable-quantity').keydown(function(event) {
-                let newValue = $(this).text().trim();
-                let index = $(this).closest('tr').index();
+                    let newValue = $(this).text().trim();
+                    let index = $(this).closest('tr').index();
 
-                if (event.keyCode !== 13) {
-                    return;
+                    if (event.keyCode !== 13) {
+                        return;
                 }
 
                 if(newValue !== '') {
@@ -125,7 +129,7 @@
             function updateQuantity(index, newValue) {
                 let item = items[index];
                 let oldValue = item.quantity;
-                let stock = parseInt($('#product_id').find(':selected').data('stock'));
+                let stock = item.stock;
                 let diff = parseInt(newValue) - oldValue;
 
                 if (parseInt(newValue) > stock) {
