@@ -27,7 +27,7 @@
   </div>
 
   @if($users->count())
-  <table class="table table-bordered mb-5 align-middle" id="user-table" style="border-color:rgb(194, 194, 194);">
+  <table class="table table-bordered align-middle" id="user-table" style="border-color:rgb(194, 194, 194);">
     <thead>
         <tr>
             <th scope="col" class="table-primary text-center align-middle">#</th>
@@ -47,7 +47,7 @@
           <td>{{ $user->email }}</td>
           <td>{{ $user->username }}</td>
           <td class="text-center">{{ $user->role }}</td>
-          <td>{{ $user->created_at->format('Y-m-d H:i:s') }}</td>
+          <td>{{ $user->created_at }}</td>
           <td scope="col" class="justify-content-center text-center">
             @if($user->role == 'Cashier')
             <a href="{{ route('users.delete', $user->id) }}" class="btn btn-danger deleteButton">

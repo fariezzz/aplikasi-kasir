@@ -24,9 +24,11 @@
       <tbody>
         @foreach($categories as $category)
           <tr>
-            <td scope="row">{{ $loop->iteration }}</td>
+            <td scope="row" class="text-center">{{ $loop->iteration }}</td>
             <td>{{ $category->name }}</td>
-            <td data-order="{{ $category->product->count() }}">{{ $category->product->count() }}</td>
+            <td data-order="{{ $category->product->count() }}" class="text-center">
+              {{ $category->product->count() }}
+            </td>
             <td scope="col" class="d-flex justify-content-center">
               <a href="/category/{{ $category->slug }}/edit" class="btn btn-warning">
                 <i class="bi bi-pencil-square"></i>

@@ -11,9 +11,9 @@
         <link rel="stylesheet" href="{{ asset('css/style.css') }}">
         <link href="{{ asset('/select2/dist/css/select2.min.css') }}" rel="stylesheet" />
         <script src="{{ asset('/jquery/node_modules/jquery/dist/jquery.min.js') }}"></script>
-        <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css">
-        <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
-        <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
+        <link rel="stylesheet" href="{{ asset('datatables/node_modules/datatables.net-bs5/css/dataTables.bootstrap5.min.css') }}">
+        <script src="{{ asset('datatables/node_modules/datatables.net/js/dataTables.min.js') }}"></script>
+        <script src="{{ asset('datatables/node_modules/datatables.net-bs5/js/dataTables.bootstrap5.min.js') }}"></script>
     </head>
 
     <body>
