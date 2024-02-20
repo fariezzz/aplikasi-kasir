@@ -16,24 +16,12 @@ class TransactionController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index()
     {
-        $transactions = Transaction::query();
-        if ($request->has('sort')) {
-            if ($request->sort == 'asc') {
-                $transactions->orderBy('date', 'desc');
-            } elseif ($request->sort == 'desc') {
-                $transactions->orderBy('date', 'asc');
-            }
-        }
-        else {
-            $transactions->orderBy('date', 'desc');
-        }
-
         return view('pages.transaction.index', [
             'title' => 'Transaction List',
             'products' => Product::all(),
-            'transactions' => $transactions->filter(request(['search']))->paginate(5)
+            'transactions' => Transaction::latest()->get()
         ]);
     }
 

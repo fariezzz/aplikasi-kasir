@@ -43,5 +43,7 @@ class DatabaseSeeder extends Seeder
             'password' => bcrypt('12345'),
             'role' => 'Admin'
         ]);
+
+        Product::factory(100)->create();
     }
 }

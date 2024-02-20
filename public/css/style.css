@@ -90,6 +90,11 @@ a.sidebar-link:hover {
     border-left: 3px solid #3b7ddd;
 }
 
+.link-active {
+    background-color: rgba(255, 255, 255, .075);
+    border-left: 3px solid #3b7ddd !important;
+}
+
 .sidebar-item {
     position: relative;
 }
@@ -111,19 +116,8 @@ a.sidebar-link:hover {
     border: none;
     outline: none;
     cursor: text;
+    text-align: center;
 }
-
-/* .pagination .page-link {
-    color: #0e2238;
-    background-color: #ffffff;
-    border-color: #0e2238;
-}
-
-.pagination .page-item.active .page-link {
-    color: #fff;
-    background-color: #0e2238;
-    border-color: #0e2238;
-} */
 
 .theme-color {
     background-color: #0e2238;
@@ -131,6 +125,18 @@ a.sidebar-link:hover {
 
 .form-border {
     border-color: black;
+}
+
+#supplier-table td:nth-child(3) {
+    max-width: 150px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+#supplier-table {
+    margin-bottom: 10px;
+    font-size: 0.9rem; 
 }
 
 /* Desktop */

@@ -14,7 +14,7 @@ class SupplierController extends Controller
     {
         return view('pages.supplier.index', [
             'title' => 'Supplier List',
-            'suppliers' => Supplier::paginate()
+            'suppliers' => Supplier::all()
         ]);
     }
 

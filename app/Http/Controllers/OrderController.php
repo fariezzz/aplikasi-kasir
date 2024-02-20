@@ -19,7 +19,7 @@ class OrderController extends Controller
     {
         return view('pages.order.index', [
             'title' => 'Item List',
-            'orders' => Order::latest()->filter(request(['search', 'status']))->paginate(5)->withQueryString(),
+            'orders' => Order::latest()->filter(request(['search', 'status']))->get(),
             'products' => Product::all()    
         ]);
     }

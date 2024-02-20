@@ -30,7 +30,7 @@
 
             <div class="row mt-4 image-button">
               <div class="col text-center">
-                <input type="file" class="position-absolute top-0 end-0 translate-middle p-1 d-none" id="image" name="image" accept="image/*" onchange="previewImage(), displayButton()">
+                <input type="file" class="position-absolute top-0 end-0 translate-middle p-1 d-none" id="image" name="image" accept="image/*" onchange="previewImage()">
                 <label for="image" class="btn btn-outline-primary">Choose Image</label>
               </div>
             </div>
@@ -40,19 +40,19 @@
 
         <div class="col-lg-6">
           <label for="name" class="form-label">Name</label>
-          <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" value="{{ old('name', auth()->user()->name) }}" onchange="displayButton()">
+          <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" value="{{ old('name', auth()->user()->name) }}">
           @error('name')<div class="invalid-feedback">{{ $message }}</div>@enderror
         </div>
 
         <div class="col-lg-6">
             <label for="email" class="form-label">Email</label>
-            <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" value="{{ old('email', auth()->user()->email) }}" onchange="displayButton()">
+            <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" value="{{ old('email', auth()->user()->email) }}">
             @error('email')<div class="invalid-feedback">{{ $message }}</div>@enderror
         </div>
         
         <div class="col-lg-6">
           <label for="username" class="form-label">Username</label>
-          <input type="text" min="1" class="form-control @error('username') is-invalid @enderror" id="username" name="username" value="{{ old('username', auth()->user()->username) }}" onchange="displayButton()">
+          <input type="text" min="1" class="form-control @error('username') is-invalid @enderror" id="username" name="username" value="{{ old('username', auth()->user()->username) }}">
           @error('username')<div class="invalid-feedback">{{ $message }}</div>@enderror
         </div>
 
@@ -73,15 +73,20 @@
 </div>
 
 <script>
-  let updateButton = document.getElementById('updateButton');
-  let elements = form.elements;
-  let originalNameValue = "{{ old('name', auth()->user()->name) }}";
-  let originalEmailValue = "{{ old('email', auth()->user()->email) }}";
-  let originalUsernameValue = "{{ old('username', auth()->user()->username) }}";
+  $(document).ready(function() {
+    $('#profileForm input').on('input', function() {
+      if ($('#updateButton').css('display') === 'none') {
+        $('#updateButton').css('display', 'block');
+      }
+    });
+  });
 
-  function displayButton() {
-    updateButton.style.display = 'block'
-  }
+  // let updateButton = document.getElementById('updateButton');
+  // let elements = form.elements;
+  // let originalNameValue = "{{ old('name', auth()->user()->name) }}";
+  // let originalEmailValue = "{{ old('email', auth()->user()->email) }}";
+  // let originalUsernameValue = "{{ old('username', auth()->user()->username) }}";
+
   // var editMode = false;
   // var originalImageSrc = @if(auth()->user()->image) "{{ asset('storage/' . auth()->user()->image) }}" @else null @endif;
   // var originalNameValue = "{{ old('name', auth()->user()->name) }}";

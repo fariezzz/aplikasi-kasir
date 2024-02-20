@@ -36,7 +36,7 @@
             <th scope="col" class="table-primary align-middle">Username</th>
             <th scope="col" class="table-primary align-middle">Role</th>
             <th scope="col" class="table-primary align-middle">Registration Date</th>
-            <th scope="col" class="table-primary align-middle">Actions</th>
+            <th scope="col" class="table-primary align-middle text-center">Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -46,11 +46,11 @@
           <td>{{ $user->name }}</td>
           <td>{{ $user->email }}</td>
           <td>{{ $user->username }}</td>
-          <td>{{ $user->role }}</td>
-          <td>{{ $user->created_at->diffForHumans() }}</td>
+          <td class="text-center">{{ $user->role }}</td>
+          <td>{{ $user->created_at->format('Y-m-d H:i:s') }}</td>
           <td scope="col" class="justify-content-center text-center">
             @if($user->role == 'Cashier')
-            <a href="{{ route('users.delete', $user->id) }}" class="btn btn-danger" id="deleteButton">
+            <a href="{{ route('users.delete', $user->id) }}" class="btn btn-danger deleteButton">
               <i class="bi bi-trash3"></i>
             </a>
             @else
@@ -68,7 +68,11 @@
 
 <script>
   $(document).ready(function () {
-    $('#user-table').DataTable();
+    $('#user-table').DataTable({
+      "columnDefs": [
+        { "orderable": false, "targets": 6 }
+      ]
+    });
 
     $('#role').change(function() {
       let role = $(this).val();

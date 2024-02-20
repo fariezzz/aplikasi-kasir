@@ -18,9 +18,9 @@ class ProductFactory extends Factory
     {
         return [
             'category_id' => '1',
-            'supplier_id' => fake()->numberBetween(1, 5),
+            'supplier_id' => '1',
             'name' => fake()->sentence(4, true),
-            'code' => fake()->numerify('#-##'),
+            'code' => fake()->numerify('#-####'),
             'stock' => fake()->numberBetween(1, 10),
             'price' => 10000,
         ];

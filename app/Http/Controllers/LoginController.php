@@ -11,18 +11,20 @@ class LoginController extends Controller
         return view('pages.auth.index', ['title' => 'Login']);
     }
 
-    public function authenticate(){
-        $credentials = request()->validate([
+    public function authenticate(Request $request){
+        $credentials = $request->validate([
             'username' => 'required',
             'password' => 'required'
         ]);
 
-        if(Auth::attempt($credentials)){
-            request()->session()->regenerate();
+        $remember = $request->has('remember');
 
+        if(Auth::attempt($credentials, $remember)){
+            $request->session()->regenerate();
+    
             return redirect()->intended('/');
         }
-
+    
         return back()->with('failed', 'Login failed!');
     }
 

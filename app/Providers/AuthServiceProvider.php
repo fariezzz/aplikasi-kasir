@@ -18,12 +18,16 @@ class AuthServiceProvider extends ServiceProvider
     ];
 
 /**
-     * Register any authentication / authorization services.
+ * Register any authentication / authorization services.
      */
     public function boot(): void
     {
         Gate::define('admin', function(User $user) {
             return $user->role === 'Admin';
-        });   
+        });
+
+        Gate::define('cashier', function(User $user) {
+            return $user->role === 'Cashier';
+        });
     }
 }

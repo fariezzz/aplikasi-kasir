@@ -5,6 +5,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>BookHaven | {{ $title }}</title>
+        <link rel="icon" type="image/png" href="{{ asset('logo/favicon.png') }}" />
         <link href="{{ asset('/bootstrap/vendor/twbs/bootstrap/dist/css/bootstrap.min.css') }}" rel="stylesheet">
         <link href="{{ asset('/bootstrap-icons/vendor/twbs/bootstrap-icons/font/bootstrap-icons.css') }}" rel="stylesheet">
         <link rel="stylesheet" href="{{ asset('css/style.css') }}">
@@ -26,6 +27,18 @@
 
         <script src="{{ asset('/select2/dist/js/select2.min.js') }}"></script>
         <script>
+            $(document).keydown(function(e) {
+                if (e.shiftKey && e.key === 'T') {
+                    window.location.href = '/transaction/checkout-now';
+                }
+            });
+
+            $(document).keydown(function(e) {
+                if (e.shiftKey && e.key === 'O') {
+                    window.location.href = '/order/create';
+                }
+            });
+
             let totalPrice = 0;
             let quantity = 0;
             let items = [];
@@ -112,17 +125,13 @@
                 $('.totalPrice').html(formatRupiah(totalPrice.toString()));
                 $('.items').html(html);
 
-                $('.editable-quantity').keydown(function(event) {
+                $('.editable-quantity').blur(function() {
                     let newValue = $(this).text().trim();
                     let index = $(this).closest('tr').index();
 
-                    if (event.keyCode !== 13) {
-                        return;
-                }
-
-                if(newValue !== '') {
-                    updateQuantity(index, newValue);
-                }
+                    if(newValue !== '') {
+                        updateQuantity(index, newValue);
+                    }
                 });
             }
 
@@ -180,7 +189,7 @@
             }
 
             $(document).ready(function() {
-                $('#deleteButton').on('click', function(event) {
+                $('.deleteButton').on('click', function(event) {
                     const confirmDelete = confirm('Are you sure to delete the data?');
                     if (!confirmDelete) {
                         event.preventDefault();
@@ -189,7 +198,7 @@
             });
             
             $(document).ready(function() {
-                $('#cancelButton').on('click', function(event) {
+                $('.cancelButton').on('click', function(event) {
                     const confirmDelete = confirm('Are you sure to cancel the order?');
                     if (!confirmDelete) {
                         event.preventDefault();

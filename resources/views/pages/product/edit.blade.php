@@ -15,7 +15,7 @@
     @endif
     
     <div class="col">
-
+      <a href="/customer" class="btn btn-primary mb-3"><i class="bi bi-arrow-left"></i> Back</a>
       <form class="row g-3" method="POST" action="/product/{{ $product->code }}" enctype="multipart/form-data">
         @method('put')
         @csrf
@@ -78,7 +78,7 @@
           <img src="{{ asset('storage/' . $product->image) }}" class="img-preview img-fluid mb-3 col-lg-12">
         </div>
 
-        <div class="col-12 mb-3">
+        <div class="col-12 mb-5">
           <button type="submit" class="btn btn-primary">Edit</button>
         </div>
 

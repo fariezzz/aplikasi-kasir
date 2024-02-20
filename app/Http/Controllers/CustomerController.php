@@ -16,7 +16,7 @@ class CustomerController extends Controller
     {
         return view('pages.customer.index', [
             'title' => 'Customer List',
-            'customers' => Customer::latest()->filter(request(['search']))->paginate(5)
+            'customers' => Customer::latest()->get()
         ]);
     }
 

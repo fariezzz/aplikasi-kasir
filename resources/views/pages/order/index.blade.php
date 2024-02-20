@@ -2,7 +2,7 @@
 
 @section('container')
 
-<div class="mx-3 container-fluid">
+<div class="mx-3 container-fluid mb-5">
   <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 mt-2 pb-2 mb-3 border-bottom header">
       <h3>Order List</h3>
   </div>
@@ -30,53 +30,57 @@
   </div>
 
   @if($orders->count())
-  <table class="table table-bordered text-center" id="order-table" style="border-color:rgb(194, 194, 194);">
+  <table class="table table-bordered align-middle" id="order-table" style="border-color:rgb(194, 194, 194);">
       <thead>
         <tr>
-          <th scope="col" class="table-primary">#</th>
-          <th scope="col" class="table-primary">Code</th>
-          <th scope="col" class="table-primary">Customer</th>
-          <th scope="col" class="table-primary">Product (qty)</th>
-          <th scope="col" class="table-primary">Total</th>
-          <th scope="col" class="table-primary">Status</th>
-          <th scope="col" class="table-primary">Actions</th>
+          <th scope="col" class="table-primary align-middle">#</th>
+          <th scope="col" class="table-primary align-middle">Code</th>
+          <th scope="col" class="table-primary align-middle">Customer</th>
+          <th scope="col" class="table-primary align-middle">Product (qty)</th>
+          <th scope="col" class="table-primary align-middle">Total</th>
+          <th scope="col" class="table-primary align-middle">Status</th>
+          <th scope="col" class="table-primary align-middle text-center">Actions</th>
         </tr>
       </thead>
       <tbody>
-          @foreach($orders as $index => $order)
+          @foreach($orders as $order)
             <tr>
-                <th scope="row">{{ $index + $orders->firstItem() }}</th>
-                <td>{{ $order->code }}</td>
+                <th scope="row" class="text-center">{{ $loop->iteration }}</th>
+                <td class="text-center">{{ $order->code }}</td>
                 <td>{{ $order->customer->name }}</td>
                 <td>
                   @foreach(json_decode($order->product_id) as $key => $product_id)
                     {{ $products->where('id', $product_id)->first()->name }}({{ json_decode($order->quantity)[$key] }})
                     @if(!$loop->last)
-                        <br>
+                        ,
                     @endif
                   @endforeach
                 </td>
-                <td>Rp. {{ number_format($order->total_price, 0, ',', '.') }}</td>
-                <td>{{ $order->status }}</td>
+                <td data-order="{{ $order->total_price }}">Rp. {{ number_format($order->total_price, 0, ',', '.') }}</td>
+                <td class="text-center">{{ $order->status }}</td>
                 <td scope="col">
                   <div class="d-flex justify-content-center">
                     @if($order->status == 'Done' || $order->status == 'Cancelled')
-                    <form action="/order/{{ $order->id }}" method="POST">
-                      @method('delete')
-                      @csrf
-                      <button class="btn btn-danger mx-2" id="deleteButton">
-                        <i class="bi bi-trash3"></i> Delete
-                      </button>
-                    </form>
+                      @if(auth()->user()->role == 'Admin')
+                        <form action="/order/{{ $order->id }}" method="POST">
+                          @method('delete')
+                          @csrf
+                          <button class="btn btn-danger mx-2 deleteButton">
+                            <i class="bi bi-trash3"></i>
+                          </button>
+                        </form>
+                      @else
+                        <span>-</span>
+                      @endif
                     @else
                     <a href="/transaction/pay-order/{{ $order->code }}" class="btn btn-primary">
-                      <i class="bi bi-credit-card-fill"></i> Pay
+                      <i class="bi bi-credit-card-fill"></i>
                     </a>
                     <form action="/order/{{ $order->id }}" method="POST">
                       @method('put')
                       @csrf
-                      <button class="btn btn-danger mx-2" id="cancelButton">
-                        <i class="bi bi-x-circle"></i> Cancel
+                      <button class="btn btn-danger mx-2 cancelButton">
+                        <i class="bi bi-x-circle"></i>
                       </button>
                     </form>
                     @endif
@@ -93,7 +97,12 @@
       
 <script>
   $(document).ready(function () {
-    $('#order-table').DataTable();
+    $('#order-table').DataTable({
+      "columnDefs": [
+        { "type": "num", "targets": 4 },
+        { "orderable": false, "targets": 6 }
+      ]
+    });
 
     $('#status').change(function() {
       let status = $(this).val();

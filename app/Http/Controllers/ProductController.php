@@ -19,7 +19,7 @@ class ProductController extends Controller
     {
         return view('pages.product.index', [
             'title' => 'Items',
-            'products' => Product::latest()->filter(request(['search', 'category']))->paginate(6),
+            'products' => Product::latest()->get(),
             'categories' => Category::all()
         ]);
     }

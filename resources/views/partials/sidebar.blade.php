@@ -10,14 +10,14 @@
         </div>
         <ul class="sidebar-nav py-3">
             <li class="sidebar-item">
-                <a href="/" class="sidebar-link">
+                <a href="/" class="sidebar-link {{ Request::is('/') ? 'link-active' : '' }}">
                     <i class="bi bi-speedometer2"></i>
                     <span>Dashboard</span>
                 </a>
             </li>
 
             <li class="sidebar-item">
-                <a href="/profile" class="sidebar-link">
+                <a href="/profile" class="sidebar-link {{ Request::is('profile*') ? 'link-active' : '' }}">
                     <i class="bi bi-person-circle"></i>
                     <span>Profile</span>
                 </a>
@@ -25,7 +25,7 @@
 
             @can('admin')
             <li class="sidebar-item">
-                <a href="/users" class="sidebar-link">
+                <a href="/users" class="sidebar-link {{ Request::is('users*') ? 'link-active' : '' }}">
                     <i class="bi bi-person-vcard"></i>
                     <span>Users</span>
                 </a>
@@ -33,16 +33,15 @@
             @endcan
 
             <li class="sidebar-item">
-                <a href="/product" class="sidebar-link">
+                <a href="/product" class="sidebar-link {{ Request::is('product*') ? 'link-active' : '' }}">
                     <i class="bi bi-box-fill"></i>
                     <span>Products</span>
                 </a>
             </li>
             
-
             @can('admin')
             <li class="sidebar-item">
-                <a href="/category" class="sidebar-link">
+                <a href="/category" class="sidebar-link {{ Request::is('category*') ? 'link-active' : '' }}">
                     <i class="bi bi-tags-fill"></i>
                     <span>Categories</span>
                 </a>
@@ -51,7 +50,7 @@
 
             @can('admin')
             <li class="sidebar-item">
-                <a href="/suppliers" class="sidebar-link">
+                <a href="/suppliers" class="sidebar-link {{ Request::is('suppliers*') ? 'link-active' : '' }}">
                     <i class="bi bi-truck"></i>
                     <span>Suppliers</span>
                 </a>
@@ -59,35 +58,38 @@
             @endcan
 
             <li class="sidebar-item">
-                <a href="/customer" class="sidebar-link">
+                <a href="/customer" class="sidebar-link {{ Request::is('customer*') ? 'link-active' : '' }}">
                     <i class="bi bi-people-fill"></i>
                     <span>Customers</span>
                 </a>
             </li>
 
             <li class="sidebar-item">
-                <a href="/order" class="sidebar-link">
+                <a href="/order" class="sidebar-link {{ Request::is('order*') ? 'link-active' : '' }}">
                     <i class="bi bi-receipt"></i>
                     <span>Orders</span>
                 </a>
             </li>
 
             <li class="sidebar-item">
-                <a href="/transaction" class="sidebar-link">
+                <a href="/transaction" class="sidebar-link {{ Request::is('transaction*') ? 'link-active' : '' }}">
                     <i class="bi bi-credit-card"></i>
                     <span>Transaction</span>
                 </a>
             </li>
-
         </ul>
         <div class="sidebar-footer">
-            <form action="/logout" method="POST">
+            <a href="/logout" class="sidebar-link mb-3">
+                <i class="bi bi-box-arrow-right"></i>
+                <span>Logout</span>
+            </a>
+            {{-- <form action="/logout" method="POST">
                 @csrf
                 <button type="submit" class="sidebar-link btn btn-link text-decoration-none text-white mx-2 mb-4">
                     <i class="bi bi-box-arrow-right"></i>
                     <span class="logout-text">Logout</span>
                 </button>
-            </form>
+            </form> --}}
         </div>
     </aside>
 {{-- </div> --}}
