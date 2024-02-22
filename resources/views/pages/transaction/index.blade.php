@@ -44,12 +44,15 @@
               <td>{{ \Carbon\Carbon::parse($transaction->date)->format('M d, Y') }}</td>
               <td scope="col">
                 <div class="d-flex justify-content-center">
-                  <a href="/transaction/{{ $transaction->code }}" class="btn btn-primary mx-2 d-flex align-items-center"><i class="bi bi-eye-fill @can('cashier') me-1 @endcan"></i>{{ auth()->user()->role == 'Admin' ? '' : ' Details'}}</a>
+                  <a href="/transaction/invoice/{{ $transaction->code }}" class="btn btn-secondary"><i class="bi bi-printer"></i></a>
+                  <a href="/transaction/{{ $transaction->code }}" class="btn btn-primary ms-1 d-flex align-items-center">
+                    <i class="bi bi-eye-fill"></i>
+                  </a>
                   @can('admin')
                   <form action="/transaction/{{ $transaction->code }}" method="POST">
                     @method('delete')
                     @csrf
-                    <button class="btn btn-danger mx-2 deleteButton"><i class="bi bi-trash3"></i></button>
+                    <button class="btn btn-danger ms-1 deleteButton"><i class="bi bi-trash3"></i></button>
                   </form>
                   @endcan
                 </div>

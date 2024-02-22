@@ -11,7 +11,7 @@
     
     <div class="col-lg-12 container-fluid">
       <a href="/order" class="btn btn-primary mb-3"><i class="bi bi-arrow-left"></i> Back</a>
-      <form class="row g-3" method="POST" action="/order">
+      <form class="row g-3 myForm" method="POST" action="/order">
         @csrf
         <div class="col-lg-6">
           <label for="customer_id" class="form-label">Customer</label>
@@ -72,7 +72,7 @@
         <div class="row">
           <div class="col-md-12 mb-3">
             <input type="hidden" name="total_price" value="0">
-            <button type="submit" class="btn btn-primary">
+            <button type="submit" class="btn btn-primary submitButton">
               <i class="bi bi-floppy-fill"></i> Save
             </button>
           </div>

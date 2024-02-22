@@ -40,7 +40,7 @@
         </tbody>
     </table>
 
-    <form method="POST" action="/transaction/pay/{{ $order->code }}">
+    <form method="POST" action="/transaction/pay/{{ $order->code }}" class="myForm">
       @csrf
       <div class="row mt-3">
         <div class="col-lg-3">
@@ -76,7 +76,7 @@
               <input type="hidden" name="quantity[]" value="{{ json_decode($order->quantity)[$index] }}">
           @endforeach
           <input type="hidden" name="total_price" value="{{ $order->total_price }}">
-          <button type="submit" class="btn btn-primary">
+          <button type="submit" class="btn btn-primary submitButton">
             <i class="bi bi-credit-card-fill"></i> Pay
           </button>
         </div>

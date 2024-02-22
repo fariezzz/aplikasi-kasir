@@ -61,10 +61,6 @@ class UserController extends Controller
             $rules['username'] = ['required', 'min:5', 'max:20', 'unique:users'];
         }
 
-        if ($request->name == $user->name && $request->email == $user->email && $request->username == $user->username && !$request->file('image')) {
-            return back()->with('error', 'No changes were made.');
-        }
-
         $validatedData = $request->validate($rules);
 
         if($request->file('image')){
@@ -72,6 +68,12 @@ class UserController extends Controller
                 Storage::delete($user->image);
             }
             $validatedData['image'] = $request->file('image')->store('user-images');
+        }
+        else {
+            if($user->image){
+                Storage::delete($user->image);
+            }
+            $validatedData['image'] = null;
         }
 
         $user->update($validatedData);

@@ -9,7 +9,7 @@
     
     <div class="col-lg-12 container-fluid">
       <a href="/customer" class="btn btn-primary mb-3"><i class="bi bi-arrow-left"></i> Back</a>
-      <form class="row g-3" method="POST" action="/customer">
+      <form class="row g-3 myForm" method="POST" action="/customer">
         @csrf
         <div class="col-lg-6">
           <label for="name" class="form-label">Name</label>
@@ -30,7 +30,7 @@
         </div>
 
         <div class="col-12 mb-3">
-          <button type="submit" class="btn btn-primary">Add</button>
+          <button type="submit" class="btn btn-primary submitButton">Add</button>
         </div>
 
       </form>

@@ -205,6 +205,12 @@
                     }
                 });
             });
+
+            $(document).ready(function() {
+                $(".myForm").submit(function() {
+                    $(".submitButton").prop("disabled", true);
+                });
+            });
         </script>
 
         <script src="{{ asset('/bootstrap/vendor/twbs/bootstrap/dist/js/bootstrap.bundle.min.js') }}"></script>

@@ -67,13 +67,15 @@ class CategoryController extends Controller
      */
     public function update(Request $request, Category $category)
     {
-        $validatedData = $request->validate([
+        $rules = [
             'name' => 'required|max:255',
-        ]);
+        ];
 
         if($request->slug != $category->slug){
-            $validatedData['slug'] = 'required|unique:products';
+            $rules['slug'] = 'required|unique:categories';
         }
+
+        $validatedData = $request->validate($rules);
 
         Category::where('id', $category->id)->update($validatedData);
 

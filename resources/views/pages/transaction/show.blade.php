@@ -7,10 +7,7 @@
         <h3>Invoice</h3>
     </div>
 
-    <div class="col">
-        <a href="/transaction" class="btn btn-primary mb-3"><i class="bi bi-arrow-left"></i> Back</a>
-        <a href="/transaction/invoice/{{ $transaction->code }}" class="btn btn-secondary mb-3"><i class="bi bi-printer"></i> Print</a>
-    </div>
+    <a href="/transaction" class="btn btn-primary mb-3"><i class="bi bi-arrow-left"></i> Back</a>
 
     <div class="d-flex justify-content-between mb-4">
         <div class="d-flex flex-column align-items-start">
