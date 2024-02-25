@@ -16,7 +16,7 @@ class Admin
     public function handle(Request $request, Closure $next): Response
     {
         if(auth()->guest() || auth()->user()->role == 'Cashier'){
-            abort(403);
+            return back();
         }
 
         return $next($request);

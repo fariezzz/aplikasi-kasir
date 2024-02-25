@@ -87,7 +87,7 @@
             <label for="amount_paid" class="form-label">Amount Paid</label>
             <div class="input-group flex-nowrap">
               <span class="input-group-text" id="addon-wrapping" style="border-color:black">Rp.</span>
-              <input type="number" class="form-control" id="amount_paid" name="amount_paid" calculateChange() aria-describedby="addon-wrapping" value="0" required>
+              <input type="number" class="form-control" id="amount_paid" name="amount_paid" calculateChange() aria-describedby="addon-wrapping" value="" required>
             </div>
           </div>
   
@@ -102,7 +102,6 @@
 
         <div class="row">
           <div class="col-md-12 mb-3">
-            <input type="hidden" name="total_price" value="0">
             <button type="submit" class="btn btn-primary"><i class="bi bi-credit-card-fill"></i> Pay</button>
           </div>
         </div>
@@ -122,15 +121,14 @@
   });
   
   function calculateChange() {
-      let totalPrice = parseFloat(document.getElementById('totalPrice').value.replace(/\./g, '').replace(',', '.'));
-      let amountPaid = parseFloat(document.getElementById('amount_paid').value.replace(/\./g, '').replace(',', '.'));
-      let change = amountPaid - totalPrice;
+    let totalPrice = parseFloat(document.getElementById('totalPrice').value.replace(/\./g, '').replace(',', '.'));
+    let amountPaid = parseFloat(document.getElementById('amount_paid').value.replace(/\./g, '').replace(',', '.'));
+    let change = amountPaid - totalPrice;
 
-      document.getElementById('change').value = change;
+    document.getElementById('change').value = change;
   }
 
   document.getElementById('amount_paid').addEventListener('input', calculateChange);
-
 </script>
 
 @endsection

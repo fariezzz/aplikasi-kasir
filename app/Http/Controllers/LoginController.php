@@ -13,8 +13,11 @@ class LoginController extends Controller
 
     public function authenticate(Request $request){
         $credentials = $request->validate([
-            'username' => 'required',
-            'password' => 'required'
+            'username' => 'required|exists:users,username',
+            'password' => 'required|matched',
+        ], [
+            'username.exists' => 'There is no such username.',
+            'password.matched' => 'The password does not match with the username.',
         ]);
 
         $remember = $request->has('remember');

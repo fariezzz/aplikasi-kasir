@@ -1,8 +1,5 @@
 <?php
 
-use App\Models\Product;
-use App\Models\Transaction;
-use Illuminate\Auth\Events\Login;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\OrderController;
@@ -10,9 +7,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\RegisterController;
-use App\Http\Controllers\SearchOrderController;
 use App\Http\Controllers\TransactionController;
-use App\Http\Controllers\ChangeStatusController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\UserController;
@@ -48,18 +43,20 @@ Route::middleware(['admin'])->group(function () {
     Route::resource('/suppliers', SupplierController::class);
 });
 
-Route::get('/profile', [UserController::class, 'show']);
-Route::post('/update-user/{user:username}', [UserController::class, 'update']);
-
-Route::resource('/product', ProductController::class);
-
-Route::resource('/customer', CustomerController::class);
-
-Route::resource('/order', OrderController::class);
-
-Route::get('/transaction/checkout-now', [TransactionController::class, 'checkoutNow']);
-Route::get('/transaction/pay-order/{order:code}', [TransactionController::class, 'payOrder']);
-Route::post('/transaction/pay/{order:code}', [TransactionController::class, 'store']);
-Route::resource('/transaction', TransactionController::class);
-Route::post('/transaction/pay-now', [TransactionController::class, 'payNow']);
-Route::get('/transaction/invoice/{code}', [TransactionController::class, 'template'])->name('invoice.print');
+Route::middleware(['auth'])->group(function () {
+    Route::get('/profile', [UserController::class, 'show']);
+    Route::post('/update-user/{user:username}', [UserController::class, 'update']);
+    
+    Route::resource('/product', ProductController::class);
+    
+    Route::resource('/customer', CustomerController::class);
+    
+    Route::resource('/order', OrderController::class);
+    
+    Route::get('/transaction/checkout-now', [TransactionController::class, 'checkoutNow']);
+    Route::get('/transaction/pay-order/{order:code}', [TransactionController::class, 'payOrder']);
+    Route::post('/transaction/pay/{order:code}', [TransactionController::class, 'store']);
+    Route::resource('/transaction', TransactionController::class);
+    Route::post('/transaction/pay-now', [TransactionController::class, 'payNow']);
+    Route::get('/transaction/invoice/{code}', [TransactionController::class, 'template'])->name('invoice.print');
+});                                                

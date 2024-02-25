@@ -4,8 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Customer;
 use Illuminate\Http\Request;
-use App\Http\Requests\StoreCustomerRequest;
-use App\Http\Requests\UpdateCustomerRequest;
+use Illuminate\Support\Facades\Gate;
 
 class CustomerController extends Controller
 {
@@ -25,9 +24,11 @@ class CustomerController extends Controller
      */
     public function create()
     {
-        return view('pages.customer.create', [
-            'title' => 'Add Customer',
-        ]);
+        return redirect('/customer');
+
+        // return view('pages.customer.create', [
+        //     'title' => 'Add Customer',
+        // ]);
     }
 
     /**
@@ -51,7 +52,7 @@ class CustomerController extends Controller
      */
     public function show(Customer $customer)
     {
-        //
+        return redirect('/customer');
     }
 
     /**
@@ -59,10 +60,12 @@ class CustomerController extends Controller
      */
     public function edit(Customer $customer)
     {
-        return view('pages.customer.edit', [
-            'title' => 'Edit Customer',
-            'customer' => $customer
-        ]);
+        return redirect('/customer');
+
+        // return view('pages.customer.edit', [
+        //     'title' => 'Edit Customer',
+        //     'customer' => $customer
+        // ]);
     }
 
     /**
@@ -86,6 +89,10 @@ class CustomerController extends Controller
      */
     public function destroy(Customer $customer)
     {
+        if (! Gate::allows('admin')) {
+            return redirect('/customer')->with('error', 'You do not have permission to perform this action.');
+        }
+
         Customer::destroy($customer->id);
 
         return back()->with('success', 'Customer has been deleted.');

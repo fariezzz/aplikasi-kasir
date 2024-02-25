@@ -4,12 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Customer;
 use App\Models\Transaction;
-use App\Models\User;
 use App\Models\Order;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Faker\Factory as FakerFactory;
-use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Gate;
 
 class TransactionController extends Controller
 {
@@ -21,7 +20,7 @@ class TransactionController extends Controller
         return view('pages.transaction.index', [
             'title' => 'Transaction List',
             'products' => Product::all(),
-            'transactions' => Transaction::latest()->get()
+            'transactions' => Transaction::latest()->with(['user', 'customer'])->get()
         ]);
     }
 
@@ -62,9 +61,9 @@ class TransactionController extends Controller
         $validatedData['user_id'] = auth()->user()->id; 
         $validatedData['date'] = now();
 
-        $uniqueCode = FakerFactory::create()->unique()->numerify('#-##');
+        $uniqueCode = FakerFactory::create()->unique()->numerify('###########');
         while (Transaction::where('code', $uniqueCode)->exists()) {
-            $uniqueCode = FakerFactory::create()->unique()->numerify('#-##');
+            $uniqueCode = FakerFactory::create()->unique()->numerify('###########');
         }
         $validatedData['code'] = $uniqueCode;
 
@@ -80,8 +79,11 @@ class TransactionController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Transaction $transaction)
+    public function show($code)
     {
+        $decryptedCode = decrypt($code);
+        $transaction = Transaction::where('code', $decryptedCode)->firstOrFail();
+
         return view('pages.transaction.show', [
             'title' => 'Invoice',
             'transaction' => $transaction,
@@ -94,7 +96,7 @@ class TransactionController extends Controller
      */
     public function edit(Transaction $transaction)
     {
-        //
+        return redirect('/supplier');
     }
 
     /**
@@ -102,7 +104,7 @@ class TransactionController extends Controller
      */
     public function update(Request $request, Transaction $transaction)
     {
-        //
+        return redirect('/supplier');
     }
 
     /**
@@ -110,13 +112,18 @@ class TransactionController extends Controller
      */
     public function destroy(Transaction $transaction)
     {
+        if (! Gate::allows('admin')) {
+            return redirect('/transaction')->with('error', 'You do not have permission to perform this action.');
+        }
+
         Transaction::destroy($transaction->id);
 
         return back()->with('success', 'Data has been deleted');
     }
 
     public function template($code){
-        $transaction = Transaction::where('code', $code)->first();
+        $decryptedCode = decrypt($code);
+        $transaction = Transaction::where('code', $decryptedCode)->firstOrFail();
 
         return view('pages.transaction.invoice', [
             'title' => 'Invoice',
@@ -154,12 +161,12 @@ class TransactionController extends Controller
         $validatedData['product_id'] = json_encode($validatedData['product_id']);
         $validatedData['quantity'] = json_encode($validatedData['quantity']);
     
-        $validatedData['user_id'] = auth()->user()->id; 
+        $validatedData['user_id'] = auth()->user()->id;
         $validatedData['date'] = now();
 
-        $uniqueCode = FakerFactory::create()->unique()->numerify('#-##');
+        $uniqueCode = FakerFactory::create()->unique()->numerify('###########');
         while (Transaction::where('code', $uniqueCode)->exists()) {
-            $uniqueCode = FakerFactory::create()->unique()->numerify('#-##');
+            $uniqueCode = FakerFactory::create()->unique()->numerify('###########');
         }
         $validatedData['code'] = $uniqueCode;
 

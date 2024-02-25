@@ -9,6 +9,7 @@ use App\Models\Transaction;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Faker\Factory as FakerFactory;
+use Illuminate\Support\Facades\Gate;
 
 class OrderController extends Controller
 {
@@ -19,7 +20,7 @@ class OrderController extends Controller
     {
         return view('pages.order.index', [
             'title' => 'Item List',
-            'orders' => Order::latest()->filter(request(['search', 'status']))->get(),
+            'orders' => Order::latest()->filter(request(['search', 'status']))->with(['transaction', 'customer'])->get(),
             'products' => Product::all()    
         ]);
     }
@@ -63,9 +64,9 @@ class OrderController extends Controller
         $validatedData['total_price'] = $request->total_price;
         $validatedData['status'] = 'Pending';
 
-        $uniqueCode = FakerFactory::create()->unique()->numerify('#-##');
+        $uniqueCode = FakerFactory::create()->unique()->numerify('###########');
         while (Order::where('code', $uniqueCode)->exists()) {
-            $uniqueCode = FakerFactory::create()->unique()->numerify('#-##');
+            $uniqueCode = FakerFactory::create()->unique()->numerify('###########');
         }
         $validatedData['code'] = $uniqueCode;
 
@@ -85,7 +86,7 @@ class OrderController extends Controller
      */
     public function show(Order $order)
     {
-        //
+        return redirect('/order');
     }
 
     /**
@@ -93,7 +94,7 @@ class OrderController extends Controller
      */
     public function edit(Order $order)
     {
-        //
+        return redirect('/order');
     }
 
     /**
@@ -119,6 +120,10 @@ class OrderController extends Controller
      */
     public function destroy(Request $request, Order $order)
     {
+        if (! Gate::allows('admin')) {
+            return redirect('/order')->with('error', 'You do not have permission to perform this action.');
+        }
+
         $order->transaction()->delete();
 
         $request->session()->forget('selected_orders');

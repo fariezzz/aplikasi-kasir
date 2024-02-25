@@ -28,13 +28,13 @@
         <script src="{{ asset('/select2/dist/js/select2.min.js') }}"></script>
         <script>
             $(document).keydown(function(e) {
-                if (e.shiftKey && e.key === 'T') {
+                if (e.altKey && e.key === 'T') {
                     window.location.href = '/transaction/checkout-now';
                 }
             });
 
             $(document).keydown(function(e) {
-                if (e.shiftKey && e.key === 'O') {
+                if (e.altKey && e.key === 'O') {
                     window.location.href = '/order/create';
                 }
             });

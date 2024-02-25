@@ -38,6 +38,6 @@ class Transaction extends Model
     }
 
     public function products(){
-        return $this->belongsToMany(Customer::class);
+        return $this->belongsToMany(Product::class);
     }
 }

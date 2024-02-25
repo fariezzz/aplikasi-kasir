@@ -55,7 +55,7 @@
           <label for="amount_paid" class="form-label">Amount Paid</label>
           <div class="input-group flex-nowrap">
             <span class="input-group-text" id="addon-wrapping" style="border-color:black">Rp.</span>
-            <input type="number" class="form-control" id="amount_paid" name="amount_paid" calculateChange() aria-describedby="addon-wrapping" value="0" required>
+            <input type="number" class="form-control" id="amount_paid" name="amount_paid" calculateChange() aria-describedby="addon-wrapping" value="" required autofocus>
           </div>
         </div>
 

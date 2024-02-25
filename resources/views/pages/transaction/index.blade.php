@@ -44,8 +44,8 @@
               <td>{{ \Carbon\Carbon::parse($transaction->date)->format('M d, Y') }}</td>
               <td scope="col">
                 <div class="d-flex justify-content-center">
-                  <a href="/transaction/invoice/{{ $transaction->code }}" class="btn btn-secondary"><i class="bi bi-printer"></i></a>
-                  <a href="/transaction/{{ $transaction->code }}" class="btn btn-primary ms-1 d-flex align-items-center">
+                  <a href="/transaction/invoice/{{ encrypt($transaction->code) }}" class="btn btn-secondary"><i class="bi bi-printer"></i></a>
+                  <a href="/transaction/{{ encrypt($transaction->code) }}" class="btn btn-primary ms-1 d-flex align-items-center">
                     <i class="bi bi-eye-fill"></i>
                   </a>
                   @can('admin')

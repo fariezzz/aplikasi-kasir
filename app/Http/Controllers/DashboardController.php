@@ -3,13 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use App\Models\Customer;
-use App\Models\Order;
 use App\Models\Product;
 use App\Models\Transaction;
-use Illuminate\Http\Request;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
@@ -39,9 +35,7 @@ class DashboardController extends Controller
         return view('pages.index', [
             'title' => 'Dashboard',
             'users' => User::all(),
-            'customers' => Customer::all(),
             'products' => Product::all(),
-            'orders' => Order::all(),
             'transactions' => $transactions,
             'transactionCounts' => $transactionCounts,
             'incomeThisMonth' => $incomeThisMonth

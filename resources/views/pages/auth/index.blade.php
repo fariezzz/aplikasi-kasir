@@ -27,7 +27,7 @@
           <form action="/login" method="POST">
             @csrf
             <div class="input-group mb-3">
-              <input type="text" name="username" id="username" class="form-control form-control-lg bg-light fs-6 @error('username') is-invalid @enderror" placeholder="Username" value="{{ old('username') }}">
+              <input type="text" name="username" id="username" class="form-control form-control-lg bg-light fs-6 @error('username') is-invalid @enderror" placeholder="Username" value="{{ old('username') }}" autofocus>
               @error('username')<div class="invalid-feedback">{{ $message }}</div>@enderror
             </div>
             <div class="input-group mb-1">

@@ -41,23 +41,25 @@
     </thead>
     <tbody>
       @foreach($users as $index => $user)
-      <tr>
-          <th scope="row" class="text-center">{{ $loop->iteration }}</th>
-          <td>{{ $user->name }}</td>
-          <td>{{ $user->email }}</td>
-          <td>{{ $user->username }}</td>
-          <td class="text-center">{{ $user->role }}</td>
-          <td>{{ $user->created_at }}</td>
-          <td scope="col" class="justify-content-center text-center">
-            @if($user->role == 'Cashier')
-            <a href="{{ route('users.delete', $user->id) }}" class="btn btn-danger deleteButton">
-              <i class="bi bi-trash3"></i>
-            </a>
-            @else
-            <span>-</span>
-            @endif
-          </td>
-      </tr>
+        @if($user->id !== auth()->user()->id)
+          <tr>
+              <th scope="row" class="text-center">{{ $loop->iteration }}</th>
+              <td>{{ $user->name }}</td>
+              <td>{{ $user->email }}</td>
+              <td>{{ $user->username }}</td>
+              <td class="text-center">{{ $user->role }}</td>
+              <td>{{ $user->created_at }}</td>
+              <td scope="col" class="justify-content-center text-center">
+                @if($user->role == 'Cashier')
+                <a href="{{ route('users.delete', $user->id) }}" class="btn btn-danger deleteButton">
+                  <i class="bi bi-trash3"></i>
+                </a>
+                @else
+                <span>-</span>
+                @endif
+              </td>
+          </tr>
+        @endif
       @endforeach
     </tbody>
   </table>

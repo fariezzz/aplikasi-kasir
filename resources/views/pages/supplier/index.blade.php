@@ -36,7 +36,9 @@
           <td scope="col">
             <div class="d-flex">
               <button type="button" class="btn btn-primary mx-2 btn-detail" data-name="{{ $supplier->name }}" data-email="{{ $supplier->email }}" data-description="{{ $supplier->description }}" data-contact="{{ $supplier->contact }}" data-address="{{ $supplier->address }}" data-joined-date="{{ $supplier->created_at->format('Y-m-d H:i:s') }}"><i class="bi bi-eye"></i></button>
-              <a href="/suppliers/{{ $supplier->id }}/edit" class="btn btn-warning"><i class="bi bi-pencil-square"></i></a>
+
+              <a href="/suppliers/{{ encrypt($supplier->id) }}/edit" class="btn btn-warning"><i class="bi bi-pencil-square"></i></a>
+
               <form action="/suppliers/{{ $supplier->id }}" method="POST">
                 @method('delete')
                 @csrf

@@ -12,11 +12,7 @@ class Order extends Model
     protected $guarded = ['id'];
 
     public function scopeFilter($query, array $filters){
-        $query->when($filters['search'] ?? false, function($query, $search){
-            $query->whereHas('customer', function($query) use ($search) {
-                $query->where('name', 'like', '%' . $search . '%');
-            });
-        })->when($filters['status'] ?? false, function($query, $status){
+        $query->when($filters['status'] ?? false, function($query, $status){
             $query->where('status', $status);
         });
     }
@@ -26,7 +22,7 @@ class Order extends Model
     }
 
     public function product(){
-        return $this->belongsTo(Product::class);
+        return $this->belongsToMany(Product::class);
     }
 
     public function customer(){

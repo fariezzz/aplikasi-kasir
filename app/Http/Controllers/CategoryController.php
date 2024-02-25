@@ -14,7 +14,7 @@ class CategoryController extends Controller
     {
         return view('pages.category.index', [
             'title' => 'Category List',
-            'categories' => Category::all()
+            'categories' => Category::with('products')->get()
         ]);
     }
 
@@ -23,9 +23,11 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        return view('pages.category.create', [
-            'title' => 'Add Category'
-        ]);
+        return redirect('/category');
+
+        // return view('pages.category.create', [
+        //     'title' => 'Add Category'
+        // ]);
     }
 
     /**
@@ -40,7 +42,7 @@ class CategoryController extends Controller
 
         Category::create($validatedData);
 
-        return redirect('/category')->with('success', 'Category has been added');
+        return redirect('/category')->with('success', 'Category has been added.');
     }
 
     /**
@@ -48,7 +50,7 @@ class CategoryController extends Controller
      */
     public function show(Category $category)
     {
-        //
+        return redirect('/category');
     }
 
     /**
@@ -56,10 +58,12 @@ class CategoryController extends Controller
      */
     public function edit(Category $category)
     {
-        return view('pages.category.edit', [
-            'title' => 'Edit Category',
-            'category' => $category
-        ]);
+        return redirect('/category');
+        
+        // return view('pages.category.edit', [
+        //     'title' => 'Edit Category',
+        //     'category' => $category
+        // ]);
     }
 
     /**
@@ -79,7 +83,7 @@ class CategoryController extends Controller
 
         Category::where('id', $category->id)->update($validatedData);
 
-        return redirect('/category')->with('success', 'Category has been updated.');
+        return back()->with('success', 'Category has been updated.');
     }
 
     /**

@@ -51,14 +51,17 @@ class SupplierController extends Controller
      */
     public function show(Supplier $supplier)
     {
-        //
+        return redirect('/supplier');
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Supplier $supplier)
+    public function edit($id)
     {
+        $decryptedId = decrypt($id);
+        $supplier = Supplier::findOrFail($decryptedId);
+
         return view('pages.supplier.edit', [
             'title' => 'Edit Supplier',
             'supplier' => $supplier

@@ -5,10 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\Supplier;
-use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Faker\Factory as FakerFactory;
+use Illuminate\Support\Facades\Gate;
 
 class ProductController extends Controller
 {
@@ -19,7 +19,7 @@ class ProductController extends Controller
     {
         return view('pages.product.index', [
             'title' => 'Items',
-            'products' => Product::latest()->get(),
+            'products' => Product::latest()->with(['supplier', 'category'])->get(),
             'categories' => Category::all()
         ]);
     }
@@ -29,6 +29,9 @@ class ProductController extends Controller
      */
     public function create()
     {
+        if (! Gate::allows('admin')) {
+            return redirect('/product');
+        }
         return view('pages.product.create', [
             'title' => 'Add Item',
             'categories' => Category::all(),
@@ -41,6 +44,10 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
+        if (! Gate::allows('admin')) {
+            return redirect('/product')->with('error', 'You do not have permission to perform this action.');
+        }
+
         $validatedData = $request->validate([
             'name' => 'required|max:255',
             'category_id' => 'required',
@@ -51,9 +58,9 @@ class ProductController extends Controller
             'image' => 'image|file|max:1024'
         ]);
 
-        $uniqueCode = FakerFactory::create()->unique()->numerify('#-##');
+        $uniqueCode = FakerFactory::create()->unique()->numerify('###########');
         while (Product::where('code', $uniqueCode)->exists()) {
-            $uniqueCode = FakerFactory::create()->unique()->numerify('#-##');
+            $uniqueCode = FakerFactory::create()->unique()->numerify('###########');
         }
         $validatedData['code'] = $uniqueCode;
 
@@ -71,14 +78,21 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        //
+        return redirect('/product');
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Product $product)
+    public function edit($code)
     {
+        if (! Gate::allows('admin')) {
+            return redirect('/product');
+        }
+
+        $decryptedCode = decrypt($code);
+        $product = Product::where('code', $decryptedCode)->firstOrFail();
+
         return view('pages.product.edit', [
             'title' => 'Edit Item',
             'product' => $product,
@@ -92,6 +106,10 @@ class ProductController extends Controller
      */
     public function update(Request $request, Product $product)
     {
+        if (! Gate::allows('admin')) {
+            return redirect('/product')->with('error', 'You do not have permission to perform this action.');
+        }
+
         $validatedData = $request->validate([
             'name' => 'required|max:255',
             'category_id' => 'required',
@@ -119,6 +137,10 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
+        if (! Gate::allows('admin')) {
+            return redirect('/product')->with('error', 'You do not have permission to perform this action.');
+        }
+
         if ($product->image) {
             Storage::delete($product->image);
         }

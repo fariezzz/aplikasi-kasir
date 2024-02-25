@@ -12,8 +12,6 @@ class Product extends Model
     
     protected $guarded = ['id'];
 
-    protected $with = ['supplier', 'category'];
-
     protected static function boot()
     {
         parent::boot();

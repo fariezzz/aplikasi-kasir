@@ -9,6 +9,8 @@
 
     @include('partials.alert')
 
+    @include('partials.alertError')
+
     <div class="container-fluid">
         <div class="row justify-content-between">
             <div class="col-lg-6">
@@ -24,7 +26,7 @@
                         <select class="form-select" name="category" id="category">
                             <option value="" selected>All Categories</option>
                             @foreach($categories as $category)
-                                <option value="{{ $category->slug }}" {{ request('category') == $category->slug ? 'selected' : '' }}>{{ $category->name }}</option>
+                                <option value="{{ $category->slug }}">{{ $category->name }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -32,18 +34,29 @@
                     <div class="col-lg-6">
                         <div class="input-group">
                             <input type="text" id="search" class="form-control" style="border-color:rgb(0, 0, 0);" placeholder="Search name..." name="search" value="{{ request('search') }}">
+                            {{-- <button type="submit" class="btn btn-primary" type="button">
+                                <i class="bi bi-search"></i>
+                            </button> --}}
                         </div>
                     </div>
                 </form>
             </div>
         </div>
+
+        {{-- <div class="my-2">
+            {{ $products->links() }}
+        </div> --}}
         
-        <div class="row mt-3" id="productList">
+        <div class="row mt-" id="productList">
             @if($products->count())
                 @foreach ($products as $product)
                     <div class="col-md-4 mb-3" data-category="{{ $product->category->slug }}">
                         <div class="card" style="height: 100%; width: auto">
-                            <img src="{{ asset('storage/' . $product->image) }}" class="card-img-top h-75" alt="">
+                            @if($product->image)
+                            <img src="{{ asset('storage/' . $product->image) }}" class="card-img-top h-75" alt="{{ $product->name }}">
+                            @else
+                            <img src="{{ asset('storage/product-default.jpg') }}" class="card-img-top h-75" alt="">
+                            @endif
 
                             <div class="card-body d-flex flex-column align-items-center">
                                 <h5 class="card-title text-center">{{ $product->name }}</h5>
@@ -55,7 +68,7 @@
                                 <button type="button" class="btn btn-primary mx-2 btn-detail" data-code="{{ $product->code }}" data-name="{{ $product->name }}" data-category="{{ $product->category->name }}" data-supplier="{{ $product->supplier->name }}" data-description="{{ $product->description }}" data-stock="{{ $product->stock }}" data-price="{{ $product->price }}"><i class="bi bi-eye"></i>{{ auth()->user()->role == 'Admin' ? '' : ' Details' }}</button>
 
                                 @can('admin')
-                                <a href="/product/{{ $product->code }}/edit">
+                                <a href="/product/{{ encrypt($product->code) }}/edit">
                                     <button type="button" class="btn btn-warning mx-2"><i class="bi bi-pencil-square"></i></button>
                                 </a>
 
@@ -104,51 +117,51 @@
 </div>
   
 <script>
-$(document).ready(function() {
-    $('#category').change(function() {
-        filterProducts();
-    });
+    $(document).ready(function() {
+        $('#category').change(function() {
+            filterProducts();
+        });
 
-    $('#search').on('input', function() {
-        filterProducts();
-    });
+        $('#search').on('input', function() {
+            filterProducts();
+        });
 
-    $('.btn-detail').click(function() {
-    let name = $(this).data('name');
-    let code = $(this).data('code');
-    let category = $(this).data('category');
-    let supplier = $(this).data('supplier');
-    let description = $(this).data('description');
-    let stock = $(this).data('stock');
-    let price = $(this).data('price');
+        $('.btn-detail').click(function() {
+            let name = $(this).data('name');
+            let code = $(this).data('code');
+            let category = $(this).data('category');
+            let supplier = $(this).data('supplier');
+            let description = $(this).data('description');
+            let stock = $(this).data('stock');
+            let price = $(this).data('price');
 
-    $('#detailName').text(name);
-    $('#detailCode').text(code);
-    $('#detailCategory').text(category);
-    $('#detailSupplier').text(supplier);
-    $('#detailDescription').text(description);
-    $('#detailStock').text(stock);
-    $('#detailPrice').text(price);
+            $('#detailName').text(name);
+            $('#detailCode').text(code);
+            $('#detailCategory').text(category);
+            $('#detailSupplier').text(supplier);
+            $('#detailDescription').text(description);
+            $('#detailStock').text(stock);
+            $('#detailPrice').text(price);
 
-    $('#detailsModal').modal('show');
-    });
+            $('#detailsModal').modal('show');
+        });
 
-    function filterProducts() {
-    let category = $('#category').val().toLowerCase();
-    let searchText = $('#search').val().toLowerCase();
+        function filterProducts() {
+            let category = $('#category').val().toLowerCase();
+            let searchText = $('#search').val().toLowerCase();
 
-    $('#productList .col-md-4').each(function() {
-        let productCategory = $(this).data('category').toLowerCase();
-        let productName = $(this).find('.card-title').text().toLowerCase();
+            $('#productList .col-md-4').each(function() {
+                let productCategory = $(this).data('category').toLowerCase();
+                let productName = $(this).find('.card-title').text().toLowerCase();
 
-        if ((category === '' || productCategory === category) && (searchText === '' || productName.includes(searchText))) {
-            $(this).show();
-        } else {
-            $(this).hide();
+                if ((category === '' || productCategory === category) && (searchText === '' || productName.includes(searchText))) {
+                    $(this).show(); 
+                } else {
+                    $(this).hide();
+                }
+            });
         }
     });
-}
-});
 </script>
 
 @endsection

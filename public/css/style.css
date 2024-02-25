@@ -133,6 +133,11 @@ a.sidebar-link:hover {
     display: block;
 }
 
+.modal-body {
+    max-height: none !important;
+    overflow-y: auto;
+}
+
 #supplier-table td:nth-child(3) {
     max-width: 150px;
     overflow: hidden;

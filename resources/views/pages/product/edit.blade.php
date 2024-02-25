@@ -15,7 +15,7 @@
     @endif
     
     <div class="col">
-      <a href="/customer" class="btn btn-primary mb-3"><i class="bi bi-arrow-left"></i> Back</a>
+      <a href="/product" class="btn btn-primary mb-3"><i class="bi bi-arrow-left"></i> Back</a>
       <form class="row g-3" method="POST" action="/product/{{ $product->code }}" enctype="multipart/form-data">
         @method('put')
         @csrf
