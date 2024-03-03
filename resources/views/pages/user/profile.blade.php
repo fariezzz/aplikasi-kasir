@@ -9,12 +9,35 @@
 
   @include('partials.alert')
 
-  @if(session()->has('error'))
-    <div class="alert alert-warning alert-dismissible fade show col" role="alert">
-    {{ session('error') }}
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  @include('partials.alertError')
+
+  @error('currentPassword')
+    <div class="alert alert-danger alert-dismissible fade show col" role="alert">
+        {!! $message !!}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
-  @endif
+  @enderror
+
+  @error('newPassword')
+    <div class="alert alert-danger alert-dismissible fade show col" role="alert">
+        {!! $message !!}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  @enderror
+
+  @error('confirmPassword')
+    <div class="alert alert-danger alert-dismissible fade show col" role="alert">
+        {!! $message !!}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  @enderror
+
+  @error('image')
+    <div class="alert alert-danger alert-dismissible fade show col" role="alert">
+        {!! $message !!}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  @enderror
   
   <div class="col-lg-12 container-fluid">
     <form id="profileForm" class="row g-3" method="POST" action="/update-user/{{ auth()->user()->username }}" enctype="multipart/form-data">
@@ -53,11 +76,17 @@
       
       <div class="col-lg-6">
         <label for="username" class="form-label">Username</label>
-        <input type="text" min="1" class="form-control @error('username') is-invalid @enderror" id="username" name="username" value="{{ old('username', auth()->user()->username) }}">
+        <input type="text" class="form-control @error('username') is-invalid @enderror" id="username" name="username" value="{{ old('username', auth()->user()->username) }}">
         @error('username')<div class="invalid-feedback">{{ $message }}</div>@enderror
       </div>
 
-      <div class="col-lg-6 mt-5">
+      <div class="col-lg-6 change-pw-button">
+        <button type="button" class="btn btn-secondary" data-bs-target="#changePasswordModal" data-bs-toggle="modal">
+          Change Password
+        </button>
+      </div>
+
+      <div class="col-lg-6 my-4">
         <button type="submit" class="btn btn-primary" id="updateButton" style="display: none;">
           Update Data
         </button>
@@ -66,8 +95,65 @@
   </div>
 </div>
 
+<div class="modal fade" id="changePasswordModal" tabindex="-1" aria-labelledby="changePasswordModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="changePasswordModalLabel">Change Password</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form method="POST" action="/profile/change-password/{{ auth()->user()->id }}">
+          @csrf
+          <div class="mb-3">
+            <label for="currentPassword" class="form-label">Current Password</label>
+            <div class="input-group">
+              <input type="password" class="form-control" id="currentPassword" name="currentPassword" autofocus required>
+              <button class="btn btn-outline-secondary togglePassword" style="border-left: 0px"  type="button">
+                <i class="bi bi-eye"></i>
+              </button>
+            </div>
+          </div>
+          <div class="mb-3">
+            <label for="newPassword" class="form-label">New Password</label>
+            <div class="input-group">
+              <input type="password" class="form-control" id="newPassword" name="newPassword" required>
+              <button class="btn btn-outline-secondary togglePassword" style="border-left: 0px"  type="button">
+                <i class="bi bi-eye"></i>
+              </button>
+            </div>
+          </div>
+          <div class="mb-3">
+            <label for="confirmPassword" class="form-label">Confirm New Password</label>
+            <div class="input-group">
+              <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required>
+              <button class="btn btn-outline-secondary togglePassword" style="border-left: 0px" type="button">
+                <i class="bi bi-eye"></i>
+              </button>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary">Change Password</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
   $(document).ready(function() {
+      $('.togglePassword').click(function() {
+      const passwordInput = $(this).siblings('input');
+      const icon = $(this).find('i');
+
+      if (passwordInput.attr('type') === 'password') {
+        passwordInput.attr('type', 'text');
+        icon.removeClass('bi-eye').addClass('bi-eye-slash');
+      } else {
+        passwordInput.attr('type', 'password');
+        icon.removeClass('bi-eye-slash').addClass('bi-eye');
+      }
+    });
+
     $('#image').change(function() {
       if ($(this).val()) {
         $('.remove-image').css('display', '');

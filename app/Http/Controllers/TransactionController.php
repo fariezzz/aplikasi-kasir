@@ -27,8 +27,11 @@ class TransactionController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function payOrder(Order $order)
+    public function payOrder($code)
     {
+        $decryptedCode = decrypt($code);
+        $order = Order::where('code', $decryptedCode)->firstOrFail();
+
         return view('pages.transaction.create', [
             'title' => 'Pay Order',
             'order' => $order,
@@ -42,6 +45,7 @@ class TransactionController extends Controller
      */
     public function store(Order $order, Request $request)
     {
+
         if($request->amount_paid < $request->total_price){
             return back()->with('error', 'Insufficient funds.');
         }
@@ -73,7 +77,7 @@ class TransactionController extends Controller
         $order->status = 'Done';
         $order->save();
     
-        return redirect('/order')->with('success', 'Transaction has been saved. Print <a href="' . route('invoice.print', $validatedData['code']) . '" class="text-decoration-underline">here.</a>');
+        return redirect('/order')->with('success', 'Transaction has been saved. Print <a href="' . route('invoice.print', encrypt($validatedData['code'])) . '" class="text-decoration-underline">here.</a>');
     }
 
     /**
@@ -178,6 +182,6 @@ class TransactionController extends Controller
             $product->save();
         }
     
-        return redirect('/transaction')->with('success', 'Transaction has been saved. Print <a href="' . route('invoice.print', $validatedData['code']) . '" class="text-decoration-underline">here.</a>');
+        return redirect('/transaction')->with('success', 'Transaction has been saved. Print <a href="' . route('invoice.print', encrypt($validatedData['code'])) . '" class="text-decoration-underline">here.</a>');
     }
 }

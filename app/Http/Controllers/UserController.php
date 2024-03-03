@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Models\User;
+use App\Models\AccountRequest;
+use App\Jobs\SendUserCreatedEmail;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
@@ -29,14 +31,28 @@ class UserController extends Controller
             'username' => ['required', 'min:5', 'max:20', 'unique:users'],
             'email' => ['required', 'email:dns', 'unique:users'],
             'role' => 'required',
-            'password' => ['required', 'min:5', 'max:255']
+            'password' => ['required', 'min:5', 'max:12']
         ]);
 
         $validatedData['password'] = Hash::make($validatedData['password']);
 
         $validatedData['remember_token'] = Str::random(10);
 
-        User::create($validatedData);
+        $user = User::create($validatedData);
+        
+        if ($request->request_id) {
+            $decryptedId = decrypt($request->request_id);
+            
+            $accountRequest = AccountRequest::findOrFail($decryptedId);
+            
+            $accountRequest->delete();
+
+            $undecryptedPassword = $request->password;
+
+            SendUserCreatedEmail::dispatch($user, $undecryptedPassword);
+
+            return redirect('/users')->with('success', 'User has been added and the data has been sent to ' .$user->email .'.');
+        }
 
         return redirect('/users')->with('success', 'User has been added.');
     }
@@ -51,6 +67,7 @@ class UserController extends Controller
     public function update(Request $request, User $user){
         $rules = [
             'name' => 'required|max:255',
+            'image' => 'nullable|image|file|max:1024'
         ];
 
         if($request->email != $user->email){

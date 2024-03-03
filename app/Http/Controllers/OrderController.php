@@ -20,7 +20,11 @@ class OrderController extends Controller
     {
         return view('pages.order.index', [
             'title' => 'Item List',
-            'orders' => Order::latest()->filter(request(['search', 'status']))->with(['transaction', 'customer'])->get(),
+            'orders' => Order::orderByRaw("CASE WHEN status = 'Pending' THEN 0 ELSE 1 END")
+                ->orderBy('created_at', 'desc')
+                ->filter(request(['search', 'status']))
+                ->with(['transaction', 'customer'])
+                ->get(),
             'products' => Product::all()    
         ]);
     }
@@ -78,7 +82,7 @@ class OrderController extends Controller
             $product->save();
         }
     
-        return redirect('/order')->with('success', 'Order has been added. Pay <a href="/transaction/create" class="text-decoration-underline">here.</a>');
+        return redirect('/order')->with('success', 'Order has been added. Pay <a href="/transaction/pay-order/' . encrypt($validatedData['code']) . '" class="text-decoration-underline">here.</a>');
     }
 
     /**

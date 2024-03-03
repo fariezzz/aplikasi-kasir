@@ -20,7 +20,7 @@ class ProductFactory extends Factory
             'category_id' => '1',
             'supplier_id' => '1',
             'name' => fake()->sentence(4, true),
-            'code' => fake()->numerify('#-####'),
+            'code' => fake()->numerify('###########'),
             'stock' => fake()->numberBetween(1, 10),
             'price' => 10000,
         ];

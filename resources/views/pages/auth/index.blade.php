@@ -20,6 +20,7 @@
         
       <div class="col-md-6 right-box">
         <div class="row align-items-center">
+          @include('partials.alert')
           <div class="header-text mb-4">
             <h2>Sign In</h2>
             <p>Sign in to your account.</p>
@@ -39,19 +40,17 @@
             </div>
             <div class="input-group mb-5 mt-2 d-flex justify-content-between">
               <div class="form-check">
-                  <input type="checkbox" id="remember" name="remember" class="form-check-input" id="formCheck">
-                  <label for="formCheck" class="form-check-label text-secondary"><small>Remember Me</small></label>
+                <input type="checkbox" id="remember" name="remember" class="form-check-input" id="formCheck" style="border-color: #9ba0a6">
+                <label for="formCheck" class="form-check-label text-secondary"><small>Remember Me</small></label>
               </div>
-              {{-- <div class="forgot">
-                  <small><a href="#">Forgot Password?</a></small>
-              </div> --}}
-              {{-- <div class="row">
-                <small>Don't have account? <a href="#">Sign Up</a></small>
-              </div> --}}
+              <div class="forgot">
+                <small><a href="/forgot-password">Forgot Password?</a></small>
+              </div>
             </div>
-            <div class="input-group mb-3">
+            <div class="input-group mb-1">
               <button class="btn btn-lg btn-primary w-100 fs-6">Login</button>
             </div>
+            <small>Don't have an account? <a href="/account-requests/create">Make a request here!</a></small>          
           </form>
         </div>
       </div> 

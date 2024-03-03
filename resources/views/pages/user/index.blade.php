@@ -40,7 +40,7 @@
         </tr>
     </thead>
     <tbody>
-      @foreach($users as $index => $user)
+      @foreach($users as $user)
         @if($user->id !== auth()->user()->id)
           <tr>
               <th scope="row" class="text-center">{{ $loop->iteration }}</th>

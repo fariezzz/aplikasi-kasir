@@ -21,12 +21,12 @@
                 @endcan
             </div>
             <div class="col-lg-6">
-                <form action="/product" method="GET" class="row g-3">
+                <form action="/product" method="GET" class="row g-3" id="productFilterForm">
                     <div class="col-lg-6">
-                        <select class="form-select" name="category" id="category">
-                            <option value="" selected>All Categories</option>
+                        <select class="form-select" name="category" id="selectCategory">
+                            <option value="">All Categories</option>
                             @foreach($categories as $category)
-                                <option value="{{ $category->slug }}">{{ $category->name }}</option>
+                                <option value="{{ $category->slug }}" {{ Request::input('category') == $category->slug ? 'selected' : '' }}>{{ $category->name }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -34,52 +34,57 @@
                     <div class="col-lg-6">
                         <div class="input-group">
                             <input type="text" id="search" class="form-control" style="border-color:rgb(0, 0, 0);" placeholder="Search name..." name="search" value="{{ request('search') }}">
-                            {{-- <button type="submit" class="btn btn-primary" type="button">
+                            <button type="submit" class="btn btn-primary" type="button">
                                 <i class="bi bi-search"></i>
-                            </button> --}}
+                            </button>
                         </div>
                     </div>
                 </form>
             </div>
         </div>
 
-        {{-- <div class="my-2">
+        <div class="my-2">
             {{ $products->links() }}
-        </div> --}}
+        </div>
         
-        <div class="row mt-" id="productList">
+        <div class="row" id="productList">
             @if($products->count())
                 @foreach ($products as $product)
                     <div class="col-md-4 mb-3" data-category="{{ $product->category->slug }}">
-                        <div class="card" style="height: 100%; width: auto">
+                        <div class="card shadow-sm h-100">
                             @if($product->image)
-                            <img src="{{ asset('storage/' . $product->image) }}" class="card-img-top h-75" alt="{{ $product->name }}">
+                                <img src="{{ asset('storage/' . $product->image) }}" class="card-img-top h-75" style="object-fit: cover;" alt="{{ $product->name }}">
                             @else
-                            <img src="{{ asset('storage/product-default.jpg') }}" class="card-img-top h-75" alt="">
+                                <img src="{{ asset('storage/product-default.jpg') }}" class="card-img-top h-75" style="object-fit: cover;" alt="{{ $product->name }}">
                             @endif
-
-                            <div class="card-body d-flex flex-column align-items-center">
-                                <h5 class="card-title text-center">{{ $product->name }}</h5>
-                                <small>Price: Rp. {{ number_format($product->price) }}</small>
-                                <small>Stock: {{ $product->stock }}</small>
+                    
+                            <div class="card-body">
+                                <h5 class="card-title">{{ $product->name }}</h5>
+                                <span class="card-text">Price: Rp. {{ number_format($product->price) }}</span><br>
+                                <span class="card-text">Stock: {{ $product->stock }}</span>
                             </div>
-
-                            <div class="d-flex justify-content-center col-lg-12 mb-3 w-100">
-                                <button type="button" class="btn btn-primary mx-2 btn-detail" data-code="{{ $product->code }}" data-name="{{ $product->name }}" data-category="{{ $product->category->name }}" data-supplier="{{ $product->supplier->name }}" data-description="{{ $product->description }}" data-stock="{{ $product->stock }}" data-price="{{ $product->price }}"><i class="bi bi-eye"></i>{{ auth()->user()->role == 'Admin' ? '' : ' Details' }}</button>
-
-                                @can('admin')
-                                <a href="/product/{{ encrypt($product->code) }}/edit">
-                                    <button type="button" class="btn btn-warning mx-2"><i class="bi bi-pencil-square"></i></button>
-                                </a>
-
-                                <form action="/product/{{ $product->code }}" method="POST" class="d-inline">
-                                    @method('delete')
-                                    @csrf
-                                    <button class="btn btn-danger mx-2 deleteButton"><i class="bi bi-trash3"></i></button>
-                                </form>
-                                @endcan
+                    
+                            <div class="card-footer">
+                                <div class="d-flex justify-content-center">
+                                    <button type="button" class="btn btn-primary mx-2 btn-detail" data-code="{{ $product->code }}" data-name="{{ $product->name }}" data-category="{{ $product->category->name }}" data-supplier="{{ $product->supplier->name }}" data-description="{{ $product->description }}" data-stock="{{ $product->stock }}" data-price="{{ $product->price }}">
+                                        <i class="bi bi-eye"></i>{{ auth()->user()->role == 'Admin' ? '' : ' Details' }}
+                                    </button>
+                    
+                                    @can('admin')
+                                    <a href="/product/{{ encrypt($product->code) }}/edit" class="btn btn-warning mx-2">
+                                        <i class="bi bi-pencil-square"></i>
+                                    </a>
+                    
+                                    <form action="/product/{{ $product->code }}" method="POST" class="d-inline">
+                                        @method('delete')
+                                        @csrf
+                                        <button class="btn btn-danger mx-2 deleteButton">
+                                            <i class="bi bi-trash3"></i>
+                                        </button>
+                                    </form>
+                                    @endcan
+                                </div>
                             </div>
-
                         </div> 
                     </div>
                 @endforeach
@@ -146,21 +151,25 @@
             $('#detailsModal').modal('show');
         });
 
-        function filterProducts() {
-            let category = $('#category').val().toLowerCase();
-            let searchText = $('#search').val().toLowerCase();
+        $('#selectCategory').change(function() {
+            $('#productFilterForm').submit();
+        });
 
-            $('#productList .col-md-4').each(function() {
-                let productCategory = $(this).data('category').toLowerCase();
-                let productName = $(this).find('.card-title').text().toLowerCase();
+        // function filterProducts() {
+        //     let category = $('#category').val().toLowerCase();
+        //     let searchText = $('#search').val().toLowerCase();
 
-                if ((category === '' || productCategory === category) && (searchText === '' || productName.includes(searchText))) {
-                    $(this).show(); 
-                } else {
-                    $(this).hide();
-                }
-            });
-        }
+        //     $('#productList .col-md-4').each(function() {
+        //         let productCategory = $(this).data('category').toLowerCase();
+        //         let productName = $(this).find('.card-title').text().toLowerCase();
+
+        //         if ((category === '' || productCategory === category) && (searchText === '' || productName.includes(searchText))) {
+        //             $(this).show(); 
+        //         } else {
+        //             $(this).hide();
+        //         }
+        //     });
+        // }
     });
 </script>
 

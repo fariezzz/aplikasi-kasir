@@ -34,10 +34,10 @@
               <td>{{ $transaction->customer->name }}</td>
               <td>
                 @foreach(json_decode($transaction->product_id) as $key => $product_id)
-                    {{ $products->where('id', $product_id)->first()->name }}({{ json_decode($transaction->quantity)[$key] }})
-                    @if(!$loop->last)
-                        ,
-                    @endif
+                  {{ $products->where('id', $product_id)->first()->name }}({{ json_decode($transaction->quantity)[$key] }})
+                  @if(!$loop->last)
+                    ,
+                  @endif
                 @endforeach
               </td>
               <td data-order="{{ $transaction->total_price }}">Rp. {{ number_format($transaction->total_price, 0, ',', '.') }}</td>

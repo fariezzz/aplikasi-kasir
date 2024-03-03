@@ -39,6 +39,12 @@
                 }
             });
 
+            $('#logoutButton').click(function(e) {
+                e.preventDefault();
+
+                $('#logoutForm').submit();
+            });
+
             let totalPrice = 0;
             let quantity = 0;
             let items = [];
@@ -125,12 +131,18 @@
                 $('.totalPrice').html(formatRupiah(totalPrice.toString()));
                 $('.items').html(html);
 
-                $('.editable-quantity').blur(function() {
-                    let newValue = $(this).text().trim();
-                    let index = $(this).closest('tr').index();
+                $('.editable-quantity').on('blur keypress', function(event) {
+                    if (event.type === 'keypress' && event.key !== 'Enter') {
+                        return;
+                    }
 
-                    if(newValue !== '') {
-                        updateQuantity(index, newValue);
+                    if (event.type === 'blur' || event.key === 'Enter') {
+                        let newValue = $(this).text().trim();
+                        let index = $(this).closest('tr').index();
+
+                        if (newValue !== '') {
+                            updateQuantity(index, newValue);
+                        }
                     }
                 });
             }

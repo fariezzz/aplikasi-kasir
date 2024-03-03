@@ -29,7 +29,7 @@
         <div class="row mt-3">
           <div class="col-lg-6">
             <label for="product_id" class="form-label">Product</label>
-              <select class="form-select select2" name="product_id" id="product_id">
+              <select class="form-select select2" id="product_id">
                 @foreach($products as $product)
                   @if($product->stock > 0)
                     <option value="{{ $product->id }}" data-name="{{ $product->name }}" data-price="{{ $product->price }}" data-id="{{ $product->id }}" data-stock="{{ $product->stock }}">{{ $product->name }} (Rp. {{ number_format($product->price) }})</option>

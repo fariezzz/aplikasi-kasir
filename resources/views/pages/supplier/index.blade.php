@@ -63,18 +63,18 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-        <div class="row">
-          <div class="col-md-6">
-            <p><strong>Name:</strong> <span id="detailName"></span></p>
-            <p><strong>Email:</strong> <span id="detailEmail"></span></p>
-            <p><strong>Contact:</strong> <span id="detailContact"></span></p>
+          <div class="row">
+            <div class="col-md-6">
+              <p><strong>Name:</strong> <span id="detailName"></span></p>
+              <p><strong>Email:</strong> <span id="detailEmail"></span></p>
+              <p><strong>Contact:</strong> <span id="detailContact"></span></p>
+            </div>
+            <div class="col-md-6">
+              <p><strong>Address:</strong> <span id="detailAddress"></span></p>
+              <p><strong>Joined Date:</strong> <span id="detailJoinedDate"></span></p>
+              <p><strong>Description:</strong> <span id="detailDescription"></span></p>
+            </div>
           </div>
-          <div class="col-md-6">
-            <p><strong>Address:</strong> <span id="detailAddress"></span></p>
-            <p><strong>Joined Date:</strong> <span id="detailJoinedDate"></span></p>
-            <p><strong>Description:</strong> <span id="detailDescription"></span></p>
-          </div>
-        </div>
       </div>
     </div>
   </div>

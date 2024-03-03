@@ -44,6 +44,14 @@ class DatabaseSeeder extends Seeder
             'role' => 'Admin'
         ]);
 
+        User::factory()->create([
+            'name' => 'Boboiboy Topan',
+            'email' => 'rajameme@gmail.com',
+            'username' => 'rajameme',
+            'password' => bcrypt('12345'),
+            'role' => 'Cashier'
+        ]);
+
         Product::factory(100)->create();
     }
 }

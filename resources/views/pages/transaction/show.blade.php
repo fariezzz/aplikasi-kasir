@@ -7,7 +7,10 @@
         <h3>Invoice</h3>
     </div>
 
-    <a href="/transaction" class="btn btn-primary mb-3"><i class="bi bi-arrow-left"></i> Back</a>
+    <div class="d-flex mb-3">
+        <a href="/transaction" class="btn btn-primary me-2"><i class="bi bi-arrow-left"></i> Back</a>
+        <a href="/transaction/invoice/{{ encrypt($transaction->code) }}" class="btn btn-secondary"><i class="bi bi-printer"></i> Print</a>
+    </div>
 
     <div class="d-flex justify-content-between mb-4">
         <div class="d-flex flex-column align-items-start">

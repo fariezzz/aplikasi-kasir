@@ -19,7 +19,7 @@ class ProductController extends Controller
     {
         return view('pages.product.index', [
             'title' => 'Items',
-            'products' => Product::latest()->with(['supplier', 'category'])->get(),
+            'products' => Product::latest()->filter(request(['search', 'category']))->with(['supplier', 'category'])->paginate(6)->withQueryString(),
             'categories' => Category::all()
         ]);
     }
@@ -124,7 +124,7 @@ class ProductController extends Controller
             if($product->image){
                 Storage::delete($product->image);
             }
-            $validatedData['image'] = $request->file('image')->store('post-images');
+            $validatedData['image'] = $request->file('image')->store('product-images');
         }
 
         Product::where('id', $product->id)->update($validatedData);

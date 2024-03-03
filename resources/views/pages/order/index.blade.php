@@ -73,7 +73,7 @@
                         <span>-</span>
                       @endif
                     @else
-                    <a href="/transaction/pay-order/{{ $order->code }}" class="btn btn-primary">
+                    <a href="/transaction/pay-order/{{ encrypt($order->code) }}" class="btn btn-primary">
                       <i class="bi bi-credit-card-fill"></i>
                     </a>
                     <form action="/order/{{ $order->id }}" method="POST">

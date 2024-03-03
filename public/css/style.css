@@ -138,6 +138,16 @@ a.sidebar-link:hover {
     overflow-y: auto;
 }
 
+.dot {
+    width: 8px;
+    height: 8px;
+    background-color: red;
+    border-radius: 50%;
+    display: inline-block;
+    margin-left: 5px;
+}
+
+
 #supplier-table td:nth-child(3) {
     max-width: 150px;
     overflow: hidden;
@@ -150,8 +160,12 @@ a.sidebar-link:hover {
     font-size: 0.9rem; 
 }
 
+.change-pw-button {
+    margin-top: 3rem;
+}
+
 /* Desktop */
-@media only screen and (min-width: 768px) {
+@media only screen and (min-width: 768px) and (max-width: 991px) {
     #sidebar {
         width: 260px;
         min-width: 260px;
@@ -174,10 +188,18 @@ a.sidebar-link:hover {
         transform: rotate(45deg);
         transition: all .2s ease-out;
     }
+
+    .change-pw-button {
+        margin-top: 26px;
+    }
 }
 
 /* Android */
 @media only screen and (max-width: 767px) {
+    .change-pw-button {
+        margin-top: 26px;
+    }
+
     #sidebar .sidebar-item .sidebar-dropdown {
         position: absolute;
         top: 0;
@@ -214,9 +236,9 @@ a.sidebar-link:hover {
     #sidebar .sidebar-logo-text {
         display: none;
     }
-    
-    .logout-text {
-        display: none;
+
+    .sidebar-header {
+        padding: 7px;
     }
 
     .container {
@@ -226,9 +248,5 @@ a.sidebar-link:hover {
 
     .header {
         width: 100vh;
-    }
-
-    .sort-button {
-        margin-bottom: 1rem;
     }
 }
