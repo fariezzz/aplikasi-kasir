@@ -29,7 +29,7 @@
         <div class="card bg-danger text-white shadow h-100">
             <div class="card-body">
                 <h5 class="card-title"><i class="bi bi-cash"></i> Income This Month</h5>
-                <p class="card-text" style="font-size: 24px;">Rp. {{ number_format($incomeThisMonth) }}</p>
+                <p class="card-text" style="font-size: 24px;">Rp. {{ number_format($incomeThisMonth, 0, ',', '.') }}</p>
             </div>
         </div>
     </div>

@@ -25,6 +25,15 @@
           @error('name')<div class="invalid-feedback">{{ $message }}</div>@enderror
         </div>
 
+        <div class="col-lg-6">
+          <label for="price" class="form-label">Price</label>
+          <div class="input-group">
+            <span class="input-group-text border-dark">Rp</span>
+            <input type="number" class="form-control @error('price') is-invalid @enderror" id="price" name="price" value="{{ old('price', $product->price) }}" required>
+            @error('price')<div class="invalid-feedback">{{ $message }}</div>@enderror
+          </div>
+        </div>
+
         <div class="col-12">
           <label for="description" class="form-label">Description</label>
           <textarea class="form-control @error('description') is-invalid @enderror" id="description" name="description">{{ old('description', $product->description) }}</textarea>
@@ -50,6 +59,12 @@
         </div>
 
         <div class="col-lg-6">
+          <label for="image" class="form-label">Image</label>
+          <input class="form-control @error('image') is-invalid @enderror" type="file" id="image" name="image" onchange="previewImage()">
+          @error('image') <div class="invalid-feedback">{{ $message }}</div> @enderror
+        </div>
+
+        <div class="col-lg-6">
           <label for="supplier_id" class="form-label">Supplier</label>
             <select class="form-select" name="supplier_id" id="supplier_id">
               @foreach($suppliers as $supplier)
@@ -62,20 +77,12 @@
             </select>
         </div>
 
-        <div class="col-lg-6">
-          <label for="price" class="form-label">Price</label>
-          <input type="number" class="form-control @error('price') is-invalid @enderror" id="price" name="price" value="{{ old('price', $product->price) }}" required autofocus>
-          @error('price')<div class="invalid-feedback">{{ $message }}</div>@enderror
-        </div>
-
-        <div class="col-lg-6">
-          <label for="image" class="form-label">Image</label>
-          <input class="form-control @error('image') is-invalid @enderror" type="file" id="image" name="image" onchange="previewImage()">
-          @error('image') <div class="invalid-feedback">{{ $message }}</div> @enderror
-        </div>
-
         <div class="col-lg-12">
-          <img src="{{ asset('storage/' . $product->image) }}" class="img-preview img-fluid mb-3 col-lg-12">
+          @if($product->image)
+            <img src="{{ asset('storage/' . $product->image) }}" class="img-preview img-fluid col-lg-12">
+          @else
+          <img src="" class="img-preview img-fluid col-lg-12">
+          @endif
         </div>
 
         <div class="col-12 mb-5">

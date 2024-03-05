@@ -58,7 +58,9 @@ class OrderController extends Controller
             'product_id.*' => 'exists:products,id',
             'quantity' => 'required|array',
             'quantity.*' => 'integer|min:1',
-            'total_price' => 'required|numeric|min:0',
+            'total_price' => 'required|numeric|min:0|max:99999999',
+        ], [
+            'total_price.max' => 'The total price must be less than Rp. 100.000.000.'
         ]);
 
         $validatedData['product_id'] = json_encode($request->product_id);

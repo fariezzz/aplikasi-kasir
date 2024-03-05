@@ -51,6 +51,12 @@
         </div>
 
         <div class="col-lg-6">
+          <label for="image" class="form-label">Image</label>
+          <input class="form-control @error('image') is-invalid @enderror" type="file" id="image" name="image" onchange="previewImage()">
+          @error('image') <div class="invalid-feedback">{{ $message }}</div> @enderror
+        </div>
+
+        <div class="col-lg-6">
           <label for="supplier_id" class="form-label">Supplier</label>
             <select class="form-select" name="supplier_id" id="supplier_id">
               @foreach($suppliers as $supplier)
@@ -61,12 +67,6 @@
                 @endif
               @endforeach
             </select>
-        </div>
-
-        <div class="col-lg-6">
-          <label for="image" class="form-label">Image</label>
-          <input class="form-control @error('image') is-invalid @enderror" type="file" id="image" name="image" onchange="previewImage()">
-          @error('image') <div class="invalid-feedback">{{ $message }}</div> @enderror
         </div>
 
         <div class="col-lg-12">

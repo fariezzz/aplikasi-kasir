@@ -60,6 +60,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/profile/change-password/{user:id}', [ChangePasswordController::class, 'changePassword']);
     Route::post('/update-user/{user:username}', [UserController::class, 'update']);
     
+    Route::post('/product/update-stock/{id}', [ProductController::class, 'updateStock']);
     Route::resource('/product', ProductController::class);
     
     Route::resource('/customer', CustomerController::class);

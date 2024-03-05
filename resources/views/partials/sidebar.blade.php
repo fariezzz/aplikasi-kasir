@@ -11,7 +11,7 @@
         <ul class="sidebar-nav py-3">
             <li class="sidebar-item">
                 <a href="/" class="sidebar-link {{ Request::is('/') ? 'link-active' : '' }}">
-                    <i class="bi bi-speedometer2"></i>
+                    <i class="bi bi-house-door-fill"></i>
                     <span>Dashboard</span>
                 </a>
             </li>
@@ -34,9 +34,9 @@
 
             @can('admin')
             <li class="sidebar-item">
-                <a href="/account-requests" class="sidebar-link {{ Request::is('requests*') ? 'link-active' : '' }}">
-                    <i class="bi bi-bell-fill"></i>
-                    <span>Notifications</span>
+                <a href="/account-requests" class="sidebar-link {{ Request::is('account-requests*') ? 'link-active' : '' }}">
+                    <i class="bi bi-envelope-fill"></i>
+                    <span>Account Requests</span>
                     @if(Illuminate\Support\Facades\Cache::has('new_request'))
                         <span class="dot"></span>
                     @endif

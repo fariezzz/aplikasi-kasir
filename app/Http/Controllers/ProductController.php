@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Faker\Factory as FakerFactory;
 use Illuminate\Support\Facades\Gate;
+use Svg\Tag\Rect;
 
 class ProductController extends Controller
 {
@@ -32,6 +33,7 @@ class ProductController extends Controller
         if (! Gate::allows('admin')) {
             return redirect('/product');
         }
+        
         return view('pages.product.create', [
             'title' => 'Add Item',
             'categories' => Category::all(),
@@ -53,9 +55,11 @@ class ProductController extends Controller
             'category_id' => 'required',
             'supplier_id' => 'required',
             'description' => 'max:255|nullable',
-            'stock' => 'integer|min:0',
-            'price' => 'required',
+            'stock' => 'required|integer|min:0',
+            'price' => 'required|numeric|min:0|max:99999999',
             'image' => 'image|file|max:1024'
+        ], [
+            'price.max' => 'The item price must be less than Rp. 100.000.000.'
         ]);
 
         $uniqueCode = FakerFactory::create()->unique()->numerify('###########');
@@ -115,9 +119,11 @@ class ProductController extends Controller
             'category_id' => 'required',
             'supplier_id' => 'required',
             'description' => 'max:255|nullable',
-            'stock' => 'integer|min:0',
-            'price' => 'required',
+            'stock' => 'required|integer|min:0',
+            'price' => 'required|numeric|min:0|max:99999999',
             'image' => 'image|file|max:1024'
+        ], [
+            'price.max' => 'The item price must be less than Rp. 100.000.000.'
         ]);
 
         if($request->file('image')){
@@ -148,5 +154,18 @@ class ProductController extends Controller
         $product->delete();
     
         return back()->with('success', 'Item and related orders/transactions have been deleted.');
+    }
+
+    public function updateStock(Request $request, $id) {
+        $product = Product::findOrFail($id);
+
+        $validatedData = $request->validate([
+            'stock' => 'required|integer|min:0'
+        ]);
+
+        $product->stock = $validatedData['stock'];
+        $product->save();
+
+        return back()->with('success', 'Stock has been updated.');
     }
 }

@@ -27,17 +27,17 @@
 
         <script src="{{ asset('/select2/dist/js/select2.min.js') }}"></script>
         <script>
-            $(document).keydown(function(e) {
-                if (e.altKey && e.key === 'T') {
-                    window.location.href = '/transaction/checkout-now';
-                }
-            });
+            // $(document).keydown(function(e) {
+            //     if (e.key === 'T' && e.key === 'R') {
+            //         window.location.href = '/transaction/checkout-now';
+            //     }
+            // });
 
-            $(document).keydown(function(e) {
-                if (e.altKey && e.key === 'O') {
-                    window.location.href = '/order/create';
-                }
-            });
+            // $(document).keydown(function(e) {
+            //     if (e.key === 'O' && e.key === 'P') {
+            //         window.location.href = '/order/create';
+            //     }
+            // });
 
             $('#logoutButton').click(function(e) {
                 e.preventDefault();
@@ -67,35 +67,32 @@
 
             function addItem() {
                 let selectedProductId = $('#product_id').val();
-                let selectedProduct = items.find(item => item.product_id == selectedProductId);
+                let selectedItemIndex = items.findIndex(item => item.product_id == selectedProductId);
 
-                if (selectedProduct) {
-                let stock = parseInt($('#product_id').find(':selected').data('stock'));
-                if (selectedProduct.quantity >= stock) {
-                    alert('Quantity cannot exceed available stock!');
-                    return;
-                }
-                }
-
-                updateTotalPrice(parseInt($('#product_id').find(':selected').data('price')))
-                let item = items.filter(el => el.product_id === $('#product_id').find(':selected').data('id'));
-                let stock = parseInt($('#product_id').find(':selected').data('stock'));
-                if (item.length > 0) {
-                item[0].quantity += 1;
-                } else {
-                    let item = {
-                    product_id: $('#product_id').find(':selected').data('id'),
-                    name: $('#product_id').find(':selected').data('name'),
-                    price: $('#product_id').find(':selected').data('price'),
-                    quantity: 1,
-                    stock: parseInt($('#product_id').find(':selected').data('stock')),
+                if (selectedItemIndex !== -1) {
+                    let stock = parseInt($('#product_id').find(':selected').data('stock'));
+                    if (items[selectedItemIndex].quantity >= stock) {
+                        alert('Quantity cannot exceed available stock!');
+                        return;
                     }
-                    items.push(item)
+                    items[selectedItemIndex].quantity += 1;
+                } else {
+                    let newItem = {
+                        product_id: $('#product_id').find(':selected').data('id'),
+                        name: $('#product_id').find(':selected').data('name'),
+                        price: $('#product_id').find(':selected').data('price'),
+                        quantity: 1,
+                        stock: parseInt($('#product_id').find(':selected').data('stock')),
+                    };
+                    items.push(newItem);
                 }
-                updateTotalQuantity(1)
-                updateTable()
-                calculateChange()
+
+                updateTotalPrice(parseInt($('#product_id').find(':selected').data('price')));
+                updateTotalQuantity(1);
+                updateTable();
+                calculateChange();
             }
+
 
             function deleteItem(index) {
                 let item = items[index];
@@ -190,19 +187,24 @@
                 const image = document.querySelector('#image');
                 const imgPreview = document.querySelector('.img-preview');
 
+                if (image.files.length === 0) {
+                    imgPreview.style.display = 'none';
+                    return;
+                }
+
                 imgPreview.style.display = 'block';
 
                 const oFReader = new FileReader();
                 oFReader.readAsDataURL(image.files[0]);
 
                 oFReader.onload = function(oFREvent){
-                imgPreview.src = oFREvent.target.result;
+                    imgPreview.src = oFREvent.target.result;
                 }
             }
 
             $(document).ready(function() {
                 $('.deleteButton').on('click', function(event) {
-                    const confirmDelete = confirm('Are you sure to delete the data?');
+                    const confirmDelete = confirm('Are you sure you want to delete this data? This action may delete all related data.');
                     if (!confirmDelete) {
                         event.preventDefault();
                     }

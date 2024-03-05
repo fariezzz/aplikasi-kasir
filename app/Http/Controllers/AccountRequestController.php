@@ -53,7 +53,7 @@ class AccountRequestController extends Controller
 
         $validatedData = $request->validate([
             'name' => 'required|max:255',
-            'username' => 'required|min:5|max:20|unique:users,username|unique:account_requests,username',
+            'username' => 'required|string|min:5|max:20|alpha_dash|unique:users,username|unique:account_requests,username',
             'email' => 'required|email:dns|unique:users,email|unique:account_requests,email',
             'role' => 'required',
             'reasons' => 'required'

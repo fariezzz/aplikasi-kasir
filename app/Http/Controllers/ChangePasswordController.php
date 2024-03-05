@@ -12,7 +12,7 @@ class ChangePasswordController extends Controller
     {
         $request->validate([
             'currentPassword' => 'required',
-            'newPassword' => 'required|min:5|max:12',
+            'newPassword' => 'required|min:5|max:15',
             'confirmPassword' => 'required|same:newPassword',
         ]);
 

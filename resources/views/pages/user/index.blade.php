@@ -40,10 +40,14 @@
         </tr>
     </thead>
     <tbody>
+      @php
+        $number = 1;
+      @endphp
+
       @foreach($users as $user)
         @if($user->id !== auth()->user()->id)
           <tr>
-              <th scope="row" class="text-center">{{ $loop->iteration }}</th>
+              <th scope="row" class="text-center">{{ $number }}</th>
               <td>{{ $user->name }}</td>
               <td>{{ $user->email }}</td>
               <td>{{ $user->username }}</td>
@@ -59,6 +63,9 @@
                 @endif
               </td>
           </tr>
+          @php
+            $number++;
+          @endphp
         @endif
       @endforeach
     </tbody>

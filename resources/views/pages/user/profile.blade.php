@@ -141,7 +141,7 @@
 
 <script>
   $(document).ready(function() {
-      $('.togglePassword').click(function() {
+    $('.togglePassword').click(function() {
       const passwordInput = $(this).siblings('input');
       const icon = $(this).find('i');
 

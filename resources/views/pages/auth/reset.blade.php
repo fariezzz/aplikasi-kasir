@@ -7,6 +7,7 @@
     <link href="{{ asset('/bootstrap/vendor/twbs/bootstrap/dist/css/bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{ asset('/bootstrap-icons/vendor/twbs/bootstrap-icons/font/bootstrap-icons.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/auth.css') }}">
+    <link rel="icon" type="image/png" href="{{ asset('logo/favicon.png') }}" />
     <title>Bookhaven | Reset Password</title>
 </head>
 <body>

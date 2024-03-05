@@ -45,7 +45,6 @@ class TransactionController extends Controller
      */
     public function store(Order $order, Request $request)
     {
-
         if($request->amount_paid < $request->total_price){
             return back()->with('error', 'Insufficient funds.');
         }
@@ -56,7 +55,9 @@ class TransactionController extends Controller
             'product_id.*' => 'exists:products,id',
             'quantity' => 'required|array',
             'quantity.*' => 'integer|min:1',
-            'total_price' => 'required|numeric|min:0',
+            'total_price' => 'required|numeric|min:0|max:99999999',
+        ], [
+            'total_price.max' => 'The total price must be less than Rp. 100.000.000.'
         ]);
 
         $validatedData['product_id'] = json_encode($request->product_id);
@@ -100,15 +101,29 @@ class TransactionController extends Controller
      */
     public function edit(Transaction $transaction)
     {
-        return redirect('/supplier');
+        return back();
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Transaction $transaction)
+    public function update(Transaction $transaction)
     {
-        return redirect('/supplier');
+        $productIds = json_decode($transaction->product_id);
+        $quantities = json_decode($transaction->quantity);
+
+        foreach ($productIds as $index => $productId) {
+            $product = Product::find($productId);
+            $quantity = $quantities[$index];
+            
+            $product->stock += $quantity;
+
+            $product->save();
+        }
+
+        $transaction->delete();
+
+        return back()->with('success', 'The transaction has been successfully canceled and the stock has been updated.');
     }
 
     /**
@@ -116,6 +131,8 @@ class TransactionController extends Controller
      */
     public function destroy(Transaction $transaction)
     {
+        return back();
+
         if (! Gate::allows('admin')) {
             return redirect('/transaction')->with('error', 'You do not have permission to perform this action.');
         }
@@ -159,7 +176,9 @@ class TransactionController extends Controller
             'product_id.*' => 'exists:products,id',
             'quantity' => 'required|array',
             'quantity.*' => 'integer|min:1',
-            'total_price' => 'required|numeric|min:0',
+            'total_price' => 'required|numeric|min:0|max:99999999',
+        ], [
+            'total_price.max' => 'The total price must be less than Rp. 100.000.000.'
         ]);
 
         $validatedData['product_id'] = json_encode($validatedData['product_id']);

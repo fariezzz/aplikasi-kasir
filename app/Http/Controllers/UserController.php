@@ -28,10 +28,11 @@ class UserController extends Controller
     public function store(Request $request){
         $validatedData = $request->validate([
             'name' => 'required|max:255',
-            'username' => ['required', 'min:5', 'max:20', 'unique:users'],
-            'email' => ['required', 'email:dns', 'unique:users'],
+            'username' => 'required|string|min:5|max:20|alpha_dash|unique:users,username',
+            'email' => 'required|email:dns|unique:users',
             'role' => 'required',
-            'password' => ['required', 'min:5', 'max:12']
+            'password' => 'required|min:5|max:15',
+            'confirm_password' => 'required|same:password'
         ]);
 
         $validatedData['password'] = Hash::make($validatedData['password']);

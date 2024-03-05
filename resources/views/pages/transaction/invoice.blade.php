@@ -9,6 +9,7 @@
     <link href="{{ asset('/bootstrap/vendor/twbs/bootstrap/dist/css/bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{ asset('/bootstrap-icons/vendor/twbs/bootstrap-icons/font/bootstrap-icons.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/invoice.css') }}">
+    <link rel="icon" type="image/png" href="{{ asset('logo/favicon.png') }}" />
     <style>
         .container {
             display: flex;
@@ -20,13 +21,18 @@
         .printable {
             width: 90%;
         }
+
+        .invoice-logo {
+            max-width: 70px;
+            height: auto;
+        }
     </style>
 </head>
 
 <body>
     <div class="container">
         <main>
-            <div class="mx-3 container-fluid printable" style="font-size: 15px">
+            <div class="mx-3 container-fluid printable my-5" style="font-size: 15px">
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-4 border-bottom header">
                     <h3 class="fw-bold">INVOICE</h3>
                 </div>
@@ -64,8 +70,8 @@
                             <tr>
                                 <td>{{ $products->where('id', $product_id)->first()->name }}</td>
                                 <td>{{ json_decode($transaction->quantity)[$key] }}</td>
-                                <td>Rp. {{ number_format($products->where('id', $product_id)->first()->price, 0, ',', ',') }}</td>
-                                <td>Rp. {{ number_format(json_decode($transaction->quantity)[$key] * $products->where('id', $product_id)->first()->price, 0, ',', ',') }}</td>
+                                <td>Rp. {{ number_format($products->where('id', $product_id)->first()->price, 0, ',', '.') }}</td>
+                                <td>Rp. {{ number_format(json_decode($transaction->quantity)[$key] * $products->where('id', $product_id)->first()->price, 0, ',', '.') }}</td>
                             </tr>
                         @endforeach
                     </tbody>
@@ -76,7 +82,7 @@
                         <tr>
                             <td><span>SUB TOTAL</span></td>
                             <td><span class="mx-3">:</span></td>
-                            <td><span>Rp. {{ number_format($transaction->total_price, 0, ',', ',') }}</span></td>
+                            <td><span>Rp. {{ number_format($transaction->total_price, 0, ',', '.') }}</span></td>
                         </tr>
                         <tr>
                             <td><span >TAX</span></td>
@@ -86,10 +92,15 @@
                         <tr>
                             <td><span class="fw-bold">TOTAL</span></td>
                             <td><span class="mx-3">:</span></td>
-                            <td><span class="fw-bold text-decoration-underline">Rp. {{ number_format($transaction->total_price, 0, ',', ',') }}</span></td>
+                            <td><span class="fw-bold text-decoration-underline">Rp. {{ number_format($transaction->total_price, 0, ',', '.') }}</span></td>
                         </tr>
                     </table>
                 </div>
+                <footer class="d-flex flex-column align-items-center">
+                    <div class="d-flex justify-content-center align-items-center mt-5">
+                        <p class="text-muted">BookHaven &copy; {{ date('Y') }}</p>
+                    </div>
+                </footer>
             </div>
         </main> 
     </div>

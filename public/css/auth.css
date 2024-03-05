@@ -5,6 +5,14 @@ body{
   background: #ececec;
 }
 
+#forgot{
+  width: 50%
+}
+
+#request{
+  width: 50%;
+}
+
 .box-area{
   width: 930px;
 }
@@ -49,5 +57,13 @@ body{
   
   .right-box{
     padding: 20px;
+  }
+
+  #forgot{
+    width: 100%
+  }
+
+  #request{
+    width: 100%;
   }
 }

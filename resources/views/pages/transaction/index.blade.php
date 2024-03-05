@@ -48,13 +48,20 @@
                   <a href="/transaction/{{ encrypt($transaction->code) }}" class="btn btn-primary ms-1 d-flex align-items-center">
                     <i class="bi bi-eye-fill"></i>
                   </a>
-                  @can('admin')
+                  @if(\Carbon\Carbon::parse($transaction->created_at)->diffInHours() < 24)
+                  <form action="/transaction/{{ $transaction->code }}" method="POST">
+                    @method('put')
+                    @csrf
+                    <button class="btn btn-danger ms-1 cancelTransactionButton"><i class="bi bi-x-circle"></i></button>
+                  </form>
+                  @endif
+                  {{-- @can('admin')
                   <form action="/transaction/{{ $transaction->code }}" method="POST">
                     @method('delete')
                     @csrf
                     <button class="btn btn-danger ms-1 deleteButton"><i class="bi bi-trash3"></i></button>
                   </form>
-                  @endcan
+                  @endcan --}}
                 </div>
               </td>
           </tr>
@@ -73,6 +80,14 @@
         { "type": "num", "targets": 4 },
         { "orderable": false, "targets": 6 }
       ]
+    });
+
+    $('.cancelTransactionButton').on('click', function(event) {
+      const confirmDelete = confirm('Are you sure you want to cancel this transaction? This action will restore the stock of the products based on the quantities in the transaction.');
+
+      if (!confirmDelete) {
+        event.preventDefault();
+      }
     });
   });
 </script>
